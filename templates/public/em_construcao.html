@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Achei no IFPI | Em Construção</title>
+
+  <meta name="description" content="A plataforma Achei no IFPI está em construção. Em breve, quem procurar aqui vai achar.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/em_construcao.css' %}">
+</head>
+
+<body>
+
+  <main class="card" aria-labelledby="page-title">
+
+    <section class="brand-area" aria-label="Identidade visual do Achei no IFPI">
+      <div class="logo-wrap">
+        <img 
+          src="{% static 'img/logo/achei-no-ifpi.png' %}" 
+          class="logo" 
+          alt="Logo Achei no IFPI"
+        >
+      </div>
+
+      <div class="status-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </section>
+
+    <span class="badge">Página em desenvolvimento</span>
+
+    <h1 id="page-title">
+      Estamos <strong>construindo</strong> algo melhor
+    </h1>
+
+    <p class="description">
+      O <strong>Achei no IFPI</strong> está sendo preparado para facilitar buscas, conexões e informações dentro da comunidade acadêmica.
+    </p>
+
+    <section class="progress-box" aria-label="Status de desenvolvimento">
+      <div class="progress-text">
+        <span>Status do projeto</span>
+        <span>Em andamento</span>
+      </div>
+
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="footer-text">
+        Em breve, quem procurar aqui vai achar.
+      </p>
+    </footer>
+
+  </main>
+
+</body>
+</html>

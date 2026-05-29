@@ -23,7 +23,9 @@ class Usuario(AbstractUser):
     tipo = models.PositiveSmallIntegerField("Tipo de Usuário", choices=TIPO)
     matricula = models.CharField("Matrícula", max_length=20, blank=True, null=True, help_text="Apenas para alunos.")
     setor = models.CharField("Setor", max_length=100, blank=True, null=True, help_text="Apenas para servidores.")
-    
+    criado_em = models.DateField(auto_now=True)
+    ativo = models.BooleanField("Ativo", default=True)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -58,3 +60,32 @@ class Usuario(AbstractUser):
     class Meta:
         verbose_name = "Usuario"
         verbose_name_plural = "Usuarios"
+
+
+class Categoria(models.Model):
+    codigo = models.CharField("Código da categoria", unique=True, max_length=10)
+    nome = models.CharField("Nome da categoria", max_length=25)
+    descricao = models.TextField("Descrição da categoria", blank=True, null=True)
+    ativa = models.BooleanField("Ativo", default=True)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "categorias"
+
+
+    def gerar_codigo(self):
+        pass
+
+    def save(self, *args, **kwargs):
+        pass
+
+class Local(models.Model):
+        codigo = models.CharField("Código da categoria", unique=True, max_length=10)
+        predio = models.CharField("Prédio", max_length=5)
+        nome = models.CharField("Nome do local", max_length=25, default="sala do ifpi")
+        telefone = models.CharField("Telefone do local", max_length=15, blank=True, null=True)
+        descricao = models.TextField("Descrição da categoria", blank=True, null=True)
+

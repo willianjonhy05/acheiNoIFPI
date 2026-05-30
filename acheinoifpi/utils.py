@@ -33,3 +33,5 @@ def admin_required(view_func):
         return redirect("login")
 
     return wrapper
+
+

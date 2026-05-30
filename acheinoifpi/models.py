@@ -96,7 +96,7 @@ class Usuario(AbstractUser):
     data_nascimento = models.DateField("Data de Nascimento", blank=True, null=True)
     cpf = models.CharField("CPF", max_length=14, unique=True, blank=True, null=True)
     foto = models.ImageField("Foto de Perfil", upload_to="usuarios/fotos/", blank=True, null=True)
-    tipo = models.PositiveSmallIntegerField("Tipo de Usuário", choices=TIPO)
+    tipo = models.PositiveSmallIntegerField("Tipo de Usuário", choices=TIPO, blank=True, null=True)
     matricula = models.CharField("Matrícula", max_length=20, blank=True, null=True, help_text="Apenas para alunos.")
     setor = models.CharField("Setor", max_length=100, blank=True, null=True, help_text="Apenas para servidores.")
     criado_em = models.DateField(auto_now=True)

@@ -30,15 +30,13 @@
                 <h1>Acessar painel</h1>
                 <p>Insira suas credenciais para gerenciar o sistema</p>
 
-                {% if form.errors or messages %}
                 {% if messages %}
                 {% for message in messages %}
-                <div class=" login-alert {{ message.tags }}">
+                <div class="login-alert {{ message.tags }}">
                     <i class="fas fa-exclamation-triangle"></i>
                     {{ message }}
                 </div>
                 {% endfor %}
-                {% endif %}
                 {% endif %}
 
 
@@ -48,9 +46,8 @@
             <form method="POST" class="login-form">
                 {% csrf_token %}
 
-
-                {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
+                {% if next_url %}
+                <input type="hidden" name="next" value="{{ next_url }}">
                 {% endif %}
 
                 <div class="login-form-group">
@@ -94,8 +91,3 @@
 </body>
 
 </html>
-
-
-
-
-

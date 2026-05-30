@@ -18,14 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login, dashboard, logout_usuario, home
+from acheinoifpi.views import login_usuario, dashboard, logout_usuario, home
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("login/", login, name="login"),
+    path("adm/", admin.site.urls),
+    path("entrar/", login_usuario, name="entrar"),
     path("logout/", logout_usuario, name="logout"),
-    path('dashboard/', dashboard, name='admin-dashboard'),
-    path('', home, name='home'),
+    path("dashboard/", dashboard, name="admin-dashboard"),
+    path("", home, name="home"),
 ]
 
 

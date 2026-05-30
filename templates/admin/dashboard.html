@@ -30,7 +30,7 @@
       <nav class="sidebar-nav">
         <a class="nav-link active" href="#" aria-current="page">
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
-          <span class="nav-text">Dashboard</span>
+          <span class="nav-text">Painel</span>
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
@@ -42,46 +42,46 @@
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-          <span class="nav-text">Profile</span>
+          <span class="nav-text">Servidores</span>
         </a>
-        <a class="nav-link" href="#">
+        <!-- <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
-          <span class="nav-text">Charts</span>
-        </a>
-        <a class="nav-link" href="#">
+          <span class="nav-text">Categorias</span>
+        </a> -->
+        <!-- <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
           <span class="nav-text">Tables</span>
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
           <span class="nav-text">Forms</span>
-        </a>
+        </a> -->
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
           <span class="nav-text">Categorias</span>
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-          <span class="nav-text">Alerts</span>
+          <span class="nav-text">Pedidos de buscas</span>
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
-          <span class="nav-text">Modals</span>
+          <span class="nav-text">Devolvidos</span>
         </a>
         <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
-          <span class="nav-text">Settings</span>
+          <span class="nav-text">Configurações</span>
         </a>
-        <a class="nav-link" href="#">
+        <!-- <a class="nav-link" href="#">
           <span class="nav-icon"><i class="bi bi-file-earmark" aria-hidden="true"></i></span>
           <span class="nav-text">Blank Page</span>
-        </a>
+        </a> -->
       </nav>
 
       <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}" alt="Admin Hasan">
-        <strong>Admin Hasan</strong>
-        <small>Active Workspace</small>
+        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}" alt="Administrador">
+        <strong>Administrador</strong>
+        <small>Sistema ativo</small>
       </div>
 
       <div class="sidebar-footer">
@@ -100,7 +100,7 @@
           </button>
 
           <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
-            <input class="form-control search-input" type="search" placeholder="Search users, orders, reports" aria-label="Search">
+            <input class="form-control search-input" type="search" placeholder="Pesquise por usuários ou objetos perdidos" aria-label="Search">
           </form>
 
           <div class="navbar-actions ms-auto">
@@ -113,26 +113,26 @@
                 <i class="bi bi-bell" aria-hidden="true"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-end notification-menu">
-                <div class="dropdown-header fw-bold text-body">Notifications</div>
+                <div class="dropdown-header fw-bold text-body">Notificações</div>
                 <a class="dropdown-item" href="#">
-                  <span class="notification-title">New user registered</span>
-                  <span class="notification-time">4 minutes ago</span>
+                  <span class="notification-title">Novo usuário registrado</span>
+                  <span class="notification-time">4 minutos atrás</span>
                 </a>
                 <a class="dropdown-item" href="#">
-                  <span class="notification-title">Revenue target reached</span>
-                  <span class="notification-time">32 minutes ago</span>
+                  <span class="notification-title">Todas os itens entregues</span>
+                  <span class="notification-time">32 minutos atrás</span>
                 </a>
                 <a class="dropdown-item" href="#">
-                  <span class="notification-title">Security review completed</span>
-                  <span class="notification-time">1 hour ago</span>
+                  <span class="notification-title">Recorde de devolução semanal</span>
+                  <span class="notification-time">1 hora atrás</span>
                 </a>
               </div>
             </div>
 
             <div class="dropdown">
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Admin Hasan">
-                <span class="profile-name d-none d-sm-inline">Admin Hasan</span>
+                <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Administrador">
+                <span class="profile-name d-none d-sm-inline">Administrador</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Perfil</a></li>
@@ -151,25 +151,25 @@
             <div class="page-heading-copy">
               <span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
               <div>
-                <p class="eyebrow mb-1">Overview</p>
-                <h1 class="h3 mb-1">Dashboard</h1>
-                <p class="text-muted mb-0">Monitor performance, sales, users, and support from one clean workspace.</p>
+                <p class="eyebrow mb-1">Visão Geral</p>
+                <h1 class="h3 mb-1">Painel</h1>
+                <p class="text-muted mb-0">Monitorize usuários, procura por objetos e itens que foram encontrados.</p>
               </div>
             </div>
-            <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-download" aria-hidden="true"></i> Export</button><button class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i> Create Report</button></div>
+            <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-download" aria-hidden="true"></i> Exportar</button><button class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i> Criar Relatório</button></div>
           </div>
 
           <section class="row g-3 mt-1" aria-label="Dashboard metrics">
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-primary">
                 <div class="metric-top">
-                  <span class="metric-label">Revenue</span>
-                  <span class="metric-icon"><i class="bi bi-currency-dollar" aria-hidden="true"></i></span>
+                  <span class="metric-label">Devolvidos</span>
+                  <span class="metric-icon"><i class="bi bi-arrow-up-right-circle"></i></span>
                 </div>
-                <div class="metric-value">$48,240</div>
+                <div class="metric-value">48</div>
                 <div class="metric-meta">
                   <span class="text-success">+12.5%</span>
-                  <span>from last month</span>
+                  <span>ao mês anterior</span>
                 </div>
               </article>
             </div>
@@ -177,13 +177,13 @@
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-success">
                 <div class="metric-top">
-                  <span class="metric-label">Orders</span>
+                  <span class="metric-label">Buscas Totais</span>
                   <span class="metric-icon"><i class="bi bi-bag-check" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">1,284</div>
+                <div class="metric-value">1.284</div>
                 <div class="metric-meta">
                   <span class="text-success">+8.2%</span>
-                  <span>new orders</span>
+                  <span>novas buscas</span>
                 </div>
               </article>
             </div>
@@ -191,13 +191,13 @@
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-warning">
                 <div class="metric-top">
-                  <span class="metric-label">Customers</span>
+                  <span class="metric-label">Usuários</span>
                   <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">8,742</div>
+                <div class="metric-value">8.742</div>
                 <div class="metric-meta">
                   <span class="text-success">+5.1%</span>
-                  <span>active users</span>
+                  <span>usuários ativos</span>
                 </div>
               </article>
             </div>
@@ -205,13 +205,13 @@
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-danger">
                 <div class="metric-top">
-                  <span class="metric-label">Tickets</span>
+                  <span class="metric-label">Sem donos</span>
                   <span class="metric-icon"><i class="bi bi-life-preserver" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">36</div>
+                <div class="metric-value">6</div>
                 <div class="metric-meta">
-                  <span class="text-danger">3 urgent</span>
-                  <span>need review</span>
+                  <span class="text-danger">objetos</span>
+                  <span>encontrados</span>
                 </div>
               </article>
             </div>
@@ -222,19 +222,19 @@
               <div class="panel">
                 <div class="panel-header">
                   <div>
-                    <h2 class="h5 mb-1 section-title"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i><span>Sales Performance</span></h2>
-                    <p class="text-muted mb-0">Monthly revenue compared with operational targets.</p>
+                    <h2 class="h5 mb-1 section-title"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i><span>Últimas devoluções mensais</span></h2>
+                    <p class="text-muted mb-0">Desempenho das devoluções ao longo do tempo.</p>
                   </div>
-                  <a class="btn btn-light btn-sm" href="#">View Details</a>
+                  <a class="btn btn-light btn-sm" href="#">Mais detalhes</a>
                 </div>
 
                 <div class="chart-bars" aria-label="Sales performance chart">
-                  <div class="chart-column bar-42"><span></span><small>Jan</small></div>
-                  <div class="chart-column bar-58"><span></span><small>Feb</small></div>
-                  <div class="chart-column bar-51"><span></span><small>Mar</small></div>
-                  <div class="chart-column bar-72"><span></span><small>Apr</small></div>
-                  <div class="chart-column bar-66"><span></span><small>May</small></div>
-                  <div class="chart-column bar-83"><span></span><small>Jun</small></div>
+                  <div class="chart-column bar-42"><span></span><small>Janeiro</small></div>
+                  <div class="chart-column bar-58"><span></span><small>Fevereiro</small></div>
+                  <div class="chart-column bar-51"><span></span><small>Março</small></div>
+                  <div class="chart-column bar-72"><span></span><small>Abril</small></div>
+                  <div class="chart-column bar-66"><span></span><small>Maio</small></div>
+                  <div class="chart-column bar-83"><span></span><small>Junho</small></div>
                 </div>
               </div>
             </div>
@@ -243,15 +243,15 @@
               <div class="panel h-100">
                 <div class="panel-header">
                   <div>
-                    <h2 class="h5 mb-1 section-title"><i class="bi bi-activity" aria-hidden="true"></i><span>Team Activity</span></h2>
-                    <p class="text-muted mb-0">Recent operational updates.</p>
+                    <h2 class="h5 mb-1 section-title"><i class="bi bi-activity" aria-hidden="true"></i><span>Últimas atividades</span></h2>
+                    <p class="text-muted mb-0">Atualizações operacionais recentes.</p>
                   </div>
                 </div>
 
                 <div class="activity-list">
-                  <div class="activity-item"><span class="activity-dot bg-primary"></span><div><p class="mb-1 fw-semibold">New campaign launched</p><p class="text-muted small mb-0">Marketing team published the May offer.</p></div></div>
-                  <div class="activity-item"><span class="activity-dot bg-success"></span><div><p class="mb-1 fw-semibold">Payment batch cleared</p><p class="text-muted small mb-0">246 invoices were processed successfully.</p></div></div>
-                  <div class="activity-item"><span class="activity-dot bg-warning"></span><div><p class="mb-1 fw-semibold">Support queue rising</p><p class="text-muted small mb-0">Average first response time is 18 minutes.</p></div></div>
+                  <div class="activity-item"><span class="activity-dot bg-primary"></span><div><p class="mb-1 fw-semibold">Nova devolução concluída</p><p class="text-muted small mb-0">Um devolução de item foi concluída com sucesso.</p></div></div>
+                  <div class="activity-item"><span class="activity-dot bg-success"></span><div><p class="mb-1 fw-semibold">Lote de devoluções limpo</p><p class="text-muted small mb-0">246 devoluções processadas com sucesso.</p></div></div>
+                  <div class="activity-item"><span class="activity-dot bg-warning"></span><div><p class="mb-1 fw-semibold">Fila de suporte em crescimento</p><p class="text-muted small mb-0">Tempo médio de primeira resposta é de 18 minutos.</p></div></div>
                 </div>
               </div>
             </div>
@@ -260,94 +260,94 @@
           <section class="panel mt-3">
             <div class="panel-header">
               <div>
-                <h2 class="h5 mb-1 section-title"><i class="bi bi-people" aria-hidden="true"></i><span>Recent Users</span></h2>
-                <p class="text-muted mb-0">Latest account activity across the workspace.</p>
+                <h2 class="h5 mb-1 section-title"><i class="bi bi-people" aria-hidden="true"></i><span>Usuários adicionados recentemente</span></h2>
+                <p class="text-muted mb-0">Últimas contas ativas no sistema.</p>
               </div>
-              <a class="btn btn-outline-secondary btn-sm" href="#">Manage Users</a>
+              <a class="btn btn-outline-secondary btn-sm" href="#">Administrar Usuários</a>
             </div>
             <div class="table-responsive">
               <table class="table align-middle mb-0">
-                <thead><tr><th scope="col">User</th><th scope="col">Role</th><th scope="col">Team</th><th scope="col">Status</th><th scope="col">Joined</th><th scope="col" class="text-end">Action</th></tr></thead>
+                <thead><tr><th scope="col">Usuário</th><th scope="col">Role</th><th scope="col">Time</th><th scope="col">Status</th><th scope="col">Ingresso</th><th scope="col" class="text-end">Ação</th></tr></thead>
                 <tbody>
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Sarah Ahmed">
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Sara Juliana">
                         <div>
-                          <p class="fw-semibold mb-0">Sarah Ahmed</p>
-                          <p class="text-muted small mb-0">sarah@example.com</p>
+                          <p class="fw-semibold mb-0">Sara Juliana</p>
+                          <p class="text-muted small mb-0">sarajuliana@acheinoifpi.com</p>
                         </div>
                       </div>
                     </td>
-                    <td>Admin</td>
-                    <td>Operations</td>
+                    <td>Administradora</td>
+                    <td>Geral</td>
                     <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Jan 12, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">View</a></td>
+                    <td>23 de maio de 2026</td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Rafi Khan">
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Roberto Carlos">
                         <div>
-                          <p class="fw-semibold mb-0">Rafi Khan</p>
-                          <p class="text-muted small mb-0">rafi@example.com</p>
+                          <p class="fw-semibold mb-0">Roberto Carlos</p>
+                          <p class="text-muted small mb-0">roberto@acheinoifpi.com</p>
                         </div>
                       </div>
                     </td>
-                    <td>Manager</td>
-                    <td>Sales</td>
+                    <td>Gerente</td>
+                    <td>Projetos</td>
                     <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Feb 03, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">View</a></td>
+                    <td>20 de maio de 2026</td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Nadia Islam">
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Francisco Eduardo">
                         <div>
-                          <p class="fw-semibold mb-0">Nadia Islam</p>
-                          <p class="text-muted small mb-0">nadia@example.com</p>
+                          <p class="fw-semibold mb-0">Francisco Eduardo</p>
+                          <p class="text-muted small mb-0">francisco@acheinoifpi.com</p>
                         </div>
                       </div>
                     </td>
-                    <td>Editor</td>
-                    <td>Content</td>
-                    <td><span class="badge text-bg-warning">Pending</span></td>
-                    <td>Mar 18, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">View</a></td>
+                    <td>Designer</td>
+                    <td>Conteúdo</td>
+                    <td><span class="badge text-bg-warning">Pendente</span></td>
+                    <td>25 de maio de 2026</td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Mina Torres">
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Kaleo Cordeiro">
                         <div>
-                          <p class="fw-semibold mb-0">Mina Torres</p>
-                          <p class="text-muted small mb-0">mina@example.com</p>
+                          <p class="fw-semibold mb-0">Kaleo Cordeiro</p>
+                          <p class="text-muted small mb-0">kaleo@acheinoifpi.com</p>
                         </div>
                       </div>
                     </td>
-                    <td>Viewer</td>
-                    <td>Finance</td>
+                    <td>Desenvolvedor</td>
+                    <td>Web</td>
                     <td><span class="badge text-bg-secondary">Suspended</span></td>
-                    <td>Apr 07, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">View</a></td>
+                    <td>27 de maio de 2026</td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Jon Oliver">
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="William Sousa">
                         <div>
-                          <p class="fw-semibold mb-0">Jon Oliver</p>
-                          <p class="text-muted small mb-0">jon@example.com</p>
+                          <p class="fw-semibold mb-0">William Sousa</p>
+                          <p class="text-muted small mb-0">william@acheinoifpi.com</p>
                         </div>
                       </div>
                     </td>
-                    <td>Analyst</td>
-                    <td>Data</td>
+                    <td>Analista</td>
+                    <td>Gerência</td>
                     <td><span class="badge text-bg-success">Active</span></td>
-                    <td>Apr 22, 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">View</a></td>
+                    <td>26 de maio 2026</td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -359,7 +359,7 @@
       <footer class="admin-footer">
         <div class="container-fluid px-3 px-lg-4">
           <span>Copyright &copy; <span id="ano-atual"></span> Versão 1.0. <br> Desenvolvido por <a target="_blank" class="fw-bold text-success" href="#">Equipe Os Perdidos</a></span>
-          <span>Professional dashboard template.</span>
+          <span>Painel de Gerenciamento Profissional.</span>
         </div>
       </footer>
     </div>

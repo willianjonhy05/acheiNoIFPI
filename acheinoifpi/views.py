@@ -27,6 +27,10 @@ def home(request):
     return render(request, "public/em_construcao.html")
 
 
+def novo_usuario(request):
+    return render(request, "admin/novo_usuario.html")
+
+
 def login_usuario(request):
     if request.user.is_authenticated:
         return redirecionar_usuario(request, request.user)

@@ -1,0 +1,59 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+
+{% block title %}Novo Usuário{% endblock %}
+
+{% block css %}
+  
+{% endblock %}
+
+
+{% block page_key %}Cadastro{% endblock %}
+
+
+{% block page_title %}Novo Usuário{% endblock %}
+
+{% block heading_actions %} {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+
+{% block conteudo %}
+  <div class="card">
+    <div class="card-header">
+      <h2>Cadastro de Novo Usuário</h2>
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_username" class="form-label">Nome de Usuário</label>
+          <input type="text" name="username" id="id_username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_email" class="form-label">E-mail</label>
+          <input type="email" name="email" id="id_email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_password1" class="form-label">Senha</label>
+          <input type="password" name="password1" id="id_password1" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_password2" class="form-label">Confirmar Senha</label>
+          <input type="password" name="password2" id="id_password2" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  {% block scripts %}
+  
+  {% endblock %}

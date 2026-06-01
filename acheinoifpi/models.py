@@ -102,6 +102,7 @@ class Usuario(AbstractUser):
     criado_em = models.DateField(auto_now=True)
     ativo = models.BooleanField("Ativo", default=True)
     local = models.ForeignKey(Local, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Local de cadastro")
+    senha_alterada = models.BooleanField("Senha alterada?", default=False)
 
 
     USERNAME_FIELD = "email"

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login_usuario, dashboard, logout_usuario, home, novo_usuario, nova_categoria, novo_local
+from acheinoifpi.views import login_usuario, dashboard, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha
 
 urlpatterns = [
     path("adm/", admin.site.urls),
@@ -13,6 +13,7 @@ urlpatterns = [
     path("dashboard/usuarios/novo/", novo_usuario, name="novo-usuario"),
     path("dashboard/categorias/novo/", nova_categoria, name="nova-categoria"),
     path("dashboard/locais/novo/", novo_local, name="novo-local"),
+    path("dashboard/perfil/alterar-senha/", alterar_senha, name="alterar_senha"),
     
     # 2º A rota mais curta do dashboard depois
     path("dashboard/", dashboard, name="admin-dashboard"),

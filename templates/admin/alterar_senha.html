@@ -1,0 +1,158 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+{% block title %}Alterar Senha{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+{% block page_key %}Conta{% endblock %}
+
+{% block page_title %}Alterar Senha{% endblock %}
+
+{% block heading_actions %}{% endblock %}
+{% block dados %}{% endblock %}
+{% block graficos %}{% endblock %}
+{% block tabelas %}{% endblock %}
+
+{% block conteudo %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} mb-3">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for erro in form.non_field_errors %}
+        <p class="mb-0">{{ erro }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="row g-3">
+
+    <!-- Senha atual -->
+    <div class="col-12">
+      <label class="form-label" for="{{ form.old_password.id_for_label }}">
+        Senha atual
+      </label>
+
+      <input 
+        class="form-control {% if form.old_password.errors %}is-invalid{% endif %}" 
+        type="password"
+        name="old_password"
+        id="{{ form.old_password.id_for_label }}"
+        placeholder="Digite sua senha atual"
+        required
+      >
+
+      {% if form.old_password.errors %}
+        <div class="invalid-feedback d-block">
+          {% for erro in form.old_password.errors %}
+            {{ erro }}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="invalid-feedback">
+          Informe sua senha atual.
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Nova senha -->
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.new_password1.id_for_label }}">
+        Nova senha
+      </label>
+
+      <input 
+        class="form-control {% if form.new_password1.errors %}is-invalid{% endif %}" 
+        type="password"
+        name="new_password1"
+        id="{{ form.new_password1.id_for_label }}"
+        placeholder="Digite a nova senha"
+        required
+      >
+
+      {% if form.new_password1.errors %}
+        <div class="invalid-feedback d-block">
+          {% for erro in form.new_password1.errors %}
+            <p class="mb-0">{{ erro }}</p>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="invalid-feedback">
+          Informe a nova senha.
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Confirmar nova senha -->
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.new_password2.id_for_label }}">
+        Confirmar nova senha
+      </label>
+
+      <input 
+        class="form-control {% if form.new_password2.errors %}is-invalid{% endif %}" 
+        type="password"
+        name="new_password2"
+        id="{{ form.new_password2.id_for_label }}"
+        placeholder="Confirme a nova senha"
+        required
+      >
+
+      {% if form.new_password2.errors %}
+        <div class="invalid-feedback d-block">
+          {% for erro in form.new_password2.errors %}
+            <p class="mb-0">{{ erro }}</p>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="invalid-feedback">
+          Confirme a nova senha.
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <hr class="my-4">
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-primary px-4" type="submit">
+      <i class="bi bi-shield-lock me-2"></i>
+      Alterar Senha
+    </button>
+  </div>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const forms = document.querySelectorAll(".needs-validation");
+
+  Array.from(forms).forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      form.classList.add("was-validated");
+    }, false);
+  });
+});
+</script>
+{% endblock %}

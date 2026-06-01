@@ -6,6 +6,9 @@ from .utils import aluno_required, servidor_required, admin_required, limpar_cpf
 from .models import Usuario, Categoria, Atividade, Local
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 
 def redirecionar_usuario(request, usuario):
     if usuario.is_superuser:
@@ -267,6 +270,30 @@ def novo_local(request):
 
     return render(request, "admin/novo_local.html")
     
+
+@login_required
+def alterar_senha(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if form.is_valid():
+            usuario = form.save()
+            usuario.senha_alterada = True
+            usuario.save(update_fields=["senha_alterada"])
+            update_session_auth_hash(request, usuario)
+
+            messages.success(request, "Senha alterada com sucesso.")
+            return redirect(request.path)
+
+        messages.error(request, "Corrija os erros abaixo para alterar sua senha.")
+
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, "admin/alterar_senha.html", {
+        "form": form
+    })
+
     
 def logout_usuario(request):
     logout(request)

@@ -5,7 +5,7 @@
 {% block title %}Novo Usuário{% endblock %}
 
 {% block css %}
-  
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
 {% endblock %}
 
 
@@ -24,36 +24,108 @@
 {% block tabelas %} {% endblock %}
 
 {% block conteudo %}
-  <div class="card">
-    <div class="card-header">
-      <h2>Cadastro de Novo Usuário</h2>
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} mb-3">
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+
+  <div class="row g-3">
+
+    <!-- Nome -->
+    <div class="col-md-6">
+      <label class="form-label" for="formName">
+        Nome Completo
+      </label>
+      <input class="form-control" id="formName" name="nome" type="text" placeholder="Digite seu nome completo"
+        value="{{ form_data.nome|default:'' }}" required>
+      <div class="invalid-feedback">
+        Nome completo é obrigatório.
+      </div>
     </div>
-    <div class="card-body">
-      <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="id_username" class="form-label">Nome de Usuário</label>
-          <input type="text" name="username" id="id_username" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="id_email" class="form-label">E-mail</label>
-          <input type="email" name="email" id="id_email" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="id_password1" class="form-label">Senha</label>
-          <input type="password" name="password1" id="id_password1" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="id_password2" class="form-label">Confirmar Senha</label>
-          <input type="password" name="password2" id="id_password2" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-      </form>
+
+    <!-- CPF -->
+    <div class="col-md-6">
+      <label class="form-label" for="formCpf">
+        CPF
+      </label>
+      <input class="form-control" id="formCpf" name="cpf" type="text" placeholder="000.000.000-00" maxlength="14"
+        value="{{ form_data.cpf|default:'' }}" required>
+      <div class="invalid-feedback">
+        CPF é obrigatório.
+      </div>
     </div>
+
+    <!-- Data de Nascimento -->
+    <div class="col-md-6">
+      <label class="form-label" for="formDatanasc">
+        Data de Nascimento
+      </label>
+      <input class="form-control" id="formDatanasc" name="data_nascimento" type="date"
+        value="{{ form_data.data_nascimento|default:'' }}" required>
+      <div class="invalid-feedback">
+        Data de nascimento é obrigatória.
+      </div>
+    </div>
+
+    <!-- E-mail -->
+    <div class="col-md-6">
+      <label class="form-label" for="formEmail">
+        E-mail
+      </label>
+      <input class="form-control" id="formEmail" name="email" type="email" placeholder="exemplo@email.com"
+        value="{{ form_data.email|default:'' }}" required>
+      <div class="invalid-feedback">
+        Informe um e-mail válido.
+      </div>
+    </div>
+
+    <!-- Matrícula -->
+    <div class="col-md-6">
+      <label class="form-label" for="formMatricula">
+        Matrícula
+      </label>
+      <input class="form-control" id="formMatricula" name="matricula" type="text" placeholder="Digite sua matrícula"
+        value="{{ form_data.matricula|default:'' }}" required>
+      <div class="invalid-feedback">
+        A matrícula é obrigatória.
+      </div>
+    </div>
+
+    <!-- Foto -->
+    <div class="col-md-6">
+      <label class="form-label" for="foto">
+        Foto de Perfil
+      </label>
+      <input class="form-control" type="file" id="foto" name="foto" accept="image/*">
+
+      <small class="text-muted">
+        Opcional. Formatos recomendados: JPG, PNG ou WEBP.
+      </small>
+    </div>
+
   </div>
 
-  {% endblock %}
+  <hr class="my-4">
 
-  {% block scripts %}
-  
-  {% endblock %}
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-primary px-4" type="submit">
+      <i class="bi bi-check-circle me-2"></i>
+      Salvar Cadastro
+    </button>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'js/validarCPF.js' %}"></script>
+
+{% endblock %}

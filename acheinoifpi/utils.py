@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib import messages
-
+import re
 
 def aluno_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -34,4 +34,5 @@ def admin_required(view_func):
 
     return wrapper
 
-
+def limpar_cpf(cpf):
+    return re.sub(r"\D", "", cpf or "")

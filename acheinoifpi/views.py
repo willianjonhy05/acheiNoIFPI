@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-from .utils import aluno_required, servidor_required, admin_required
-
-
+from .utils import aluno_required, servidor_required, admin_required, limpar_cpf
+from .models import Usuario
+from django.db import IntegrityError
 
 def redirecionar_usuario(request, usuario):
     if usuario.is_superuser:
@@ -28,8 +28,70 @@ def home(request):
 
 
 def novo_usuario(request):
-    return render(request, "admin/novo_usuario.html")
+    if request.method == "POST":
+        nome = request.POST.get("nome", "").strip()
+        cpf = limpar_cpf(request.POST.get("cpf"))
+        data_nascimento = request.POST.get("data_nascimento") or None
+        email = request.POST.get("email", "").strip().lower()
+        matricula = request.POST.get("matricula", "").strip()
+        foto = request.FILES.get("foto")
 
+        erros = []
+
+        if not nome:
+            erros.append("Nome completo é obrigatório.")
+
+        if not cpf:
+            erros.append("CPF é obrigatório.")
+        elif len(cpf) != 11:
+            erros.append("CPF inválido. Informe os 11 dígitos.")
+
+        if not data_nascimento:
+            erros.append("Data de nascimento é obrigatória.")
+
+        if not email:
+            erros.append("E-mail é obrigatório.")
+
+        if not matricula:
+            erros.append("Matrícula é obrigatória.")
+
+        if email and Usuario.objects.filter(email=email).exists():
+            erros.append("Já existe um usuário cadastrado com este e-mail.")
+
+        if cpf and Usuario.objects.filter(cpf=cpf).exists():
+            erros.append("Já existe um usuário cadastrado com este CPF.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(request, "admin/novo_usuario.html", {
+                "form_data": request.POST
+            })
+
+        try:
+            usuario = Usuario(
+                nome=nome,
+                cpf=cpf,
+                data_nascimento=data_nascimento,
+                email=email,
+                matricula=matricula,
+                tipo=1,
+                ativo=True,
+            )
+
+            if foto:
+                usuario.foto = foto
+
+            usuario.save()
+
+            messages.success(request, "Usuário cadastrado com sucesso.")
+            return redirect("admin-dashboard")
+
+        except IntegrityError:
+            messages.error(request, "Erro ao salvar. Verifique se CPF ou e-mail já estão cadastrados.")
+
+    return render(request, "admin/novo_usuario.html")
 
 def login_usuario(request):
     if request.user.is_authenticated:
@@ -77,7 +139,15 @@ def logout_usuario(request):
     return redirect("entrar")
 
 def dashboard(request):
-    return render(request, 'admin/dashboard.html')
+    qtde_usuarios = Usuario.objects.count()
+    usuarios = Usuario.objects.all()[:5]  # Exemplo: pegar os 5 usuários mais recentes
+    
+    context = {
+        "qtde_usuarios": qtde_usuarios,
+        "usuarios": usuarios,
+    }
+    
+    return render(request, 'admin/dashboard.html', context)
 
 @aluno_required
 def dashboard_aluno(request):

@@ -1,19 +1,3 @@
-"""
-URL configuration for setup project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
@@ -24,11 +8,16 @@ urlpatterns = [
     path("adm/", admin.site.urls),
     path("entrar/", login_usuario, name="entrar"),
     path("logout/", logout_usuario, name="logout"),
-    path("novo-usuario/", novo_usuario, name="novo-usuario"),
+    
+    # 1º A rota mais longa/específica (usuarios/novo) ANTES da rota geral
+    path("dashboard/usuarios/novo/", novo_usuario, name="novo-usuario"),
+    
+    # 2º A rota mais curta do dashboard depois
     path("dashboard/", dashboard, name="admin-dashboard"),
+    
+    # 3º A raiz do site por último
     path("", home, name="home"),
 ]
-
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -202,11 +202,11 @@
                   <span class="metric-label">Usuários</span>
                   <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">8.742</div>
-                <div class="metric-meta">
+                <div class="metric-value">{{ qtde_usuarios }}</div>
+                <!-- <div class="metric-meta">
                   <span class="text-success">+5.1%</span>
                   <span>usuários ativos</span>
-                </div>
+                </div> -->
               </article>
             </div>
 
@@ -286,88 +286,33 @@
             </div>
             <div class="table-responsive">
               <table class="table align-middle mb-0">
-                <thead><tr><th scope="col">Usuário</th><th scope="col">Role</th><th scope="col">Time</th><th scope="col">Status</th><th scope="col">Ingresso</th><th scope="col" class="text-end">Ação</th></tr></thead>
+                <thead><tr><th scope="col">Usuário</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col">Ingresso</th><th scope="col" class="text-end">Ação</th></tr></thead>
                 <tbody>
+                  {% for usuario in usuarios %}
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Sara Juliana">
+
+                        {% if usuario.foto %}
+                        <img class="avatar-img avatar-sm" src="{{ usuario.foto.url }}" alt="{{ usuario.nome }}">
+                        {% else %}
+                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="{{ usuario.nome }}">
+                        {% endif %}
                         <div>
-                          <p class="fw-semibold mb-0">Sara Juliana</p>
-                          <p class="text-muted small mb-0">sarajuliana@acheinoifpi.com</p>
+                          <p class="fw-semibold mb-0">{{ usuario.nome }}</p>
+                          <p class="text-muted small mb-0">{{ usuario.email }}</p>
                         </div>
                       </div>
                     </td>
-                    <td>Administradora</td>
-                    <td>Geral</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>23 de maio de 2026</td>
+                    <td>{{ usuario.get_tipo_display }}</td>                 
+                    <td><span class="badge text-bg-success">{{usuario.ativo}}</span></td>
+                    <td>{{ usuario.criado_em|date:"d/m/Y" }}</td>
                     <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
                   </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Roberto Carlos">
-                        <div>
-                          <p class="fw-semibold mb-0">Roberto Carlos</p>
-                          <p class="text-muted small mb-0">roberto@acheinoifpi.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Gerente</td>
-                    <td>Projetos</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>20 de maio de 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Francisco Eduardo">
-                        <div>
-                          <p class="fw-semibold mb-0">Francisco Eduardo</p>
-                          <p class="text-muted small mb-0">francisco@acheinoifpi.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Designer</td>
-                    <td>Conteúdo</td>
-                    <td><span class="badge text-bg-warning">Pendente</span></td>
-                    <td>25 de maio de 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Kaleo Cordeiro">
-                        <div>
-                          <p class="fw-semibold mb-0">Kaleo Cordeiro</p>
-                          <p class="text-muted small mb-0">kaleo@acheinoifpi.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Desenvolvedor</td>
-                    <td>Web</td>
-                    <td><span class="badge text-bg-secondary">Suspended</span></td>
-                    <td>27 de maio de 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="William Sousa">
-                        <div>
-                          <p class="fw-semibold mb-0">William Sousa</p>
-                          <p class="text-muted small mb-0">william@acheinoifpi.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>Analista</td>
-                    <td>Gerência</td>
-                    <td><span class="badge text-bg-success">Active</span></td>
-                    <td>26 de maio 2026</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
-                  </tr>
+                  {% endfor %}
+                
+                
+                 
                 </tbody>
               </table>
             </div>

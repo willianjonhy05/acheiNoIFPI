@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-from .utils import aluno_required, servidor_required, admin_required, limpar_cpf
-from .models import Usuario, Categoria, Atividade
+from .utils import aluno_required, servidor_required, admin_required, limpar_cpf, limpar_telefone
+from .models import Usuario, Categoria, Atividade, Local
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 
@@ -186,6 +186,86 @@ def login_usuario(request):
     return render(request, "admin/login.html", {
         "next_url": next_url,
     })
+    
+def novo_local(request):
+    if request.method == "POST":
+        nome = request.POST.get("nome", "").strip()
+        predio = request.POST.get("predio", "").strip()
+        andar = request.POST.get("andar", "").strip()
+        telefone = limpar_telefone(request.POST.get("telefone"))
+        descricao = request.POST.get("descricao", "").strip()
+
+        sala_de_aula = request.POST.get("sala_de_aula") == "on"
+        laboratorio = request.POST.get("laboratorio") == "on"
+
+        erros = []
+
+        if not nome:
+            erros.append("Nome do local é obrigatório.")
+
+        if len(nome) > 25:
+            erros.append("O nome do local deve ter no máximo 25 caracteres.")
+
+        if not predio:
+            erros.append("Prédio é obrigatório.")
+
+        if len(predio) > 5:
+            erros.append("O prédio deve ter no máximo 5 caracteres.")
+
+        if not andar:
+            erros.append("Andar é obrigatório.")
+
+        if len(andar) > 5:
+            erros.append("O andar deve ter no máximo 5 caracteres.")
+
+        if telefone and len(telefone) not in [10, 11]:
+            erros.append("Telefone inválido. Informe o telefone com DDD.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(request, "admin/novo_local.html", {
+                "form_data": request.POST
+            })
+
+        try:
+            local = Local(
+                nome=nome,
+                predio=predio,
+                andar=andar,
+                telefone=telefone,
+                descricao=descricao or None,
+                sala_de_aula=sala_de_aula,
+                laboratorio=laboratorio,
+                ativa=True
+            )
+
+            local.save()
+
+            messages.success(
+                request,
+                f"Local '{local.nome}' cadastrado com sucesso. Código gerado: {local.codigo}."
+            )
+
+            return redirect(request.path)
+
+        except ValidationError as erro:
+            if hasattr(erro, "message_dict"):
+                for campo, mensagens in erro.message_dict.items():
+                    for mensagem in mensagens:
+                        messages.error(request, mensagem)
+            else:
+                for mensagem in erro.messages:
+                    messages.error(request, mensagem)
+
+        except IntegrityError:
+            messages.error(
+                request,
+                "Erro ao salvar local. Já existe um local com código semelhante."
+            )
+
+    return render(request, "admin/novo_local.html")
     
     
 def logout_usuario(request):

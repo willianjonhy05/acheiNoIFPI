@@ -1,0 +1,166 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+
+{% block title %}Novo Local{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+
+{% block page_key %}Cadastro{% endblock %}
+
+
+{% block page_title %}Novo Local{% endblock %}
+
+{% block heading_actions %} {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+
+{% block conteudo %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} mb-3">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row g-3">
+
+        <!-- Nome -->
+        <div class="col-12">
+            <label class="form-label" for="formName">
+                Nome do Local
+            </label>
+
+            <input class="form-control" id="formName" name="nome" type="text" maxlength="25"
+                placeholder="Digite o nome do local" value="{{ form_data.nome|default:'' }}" required>
+
+            <div class="invalid-feedback">
+                Nome do local é obrigatório.
+            </div>
+        </div>
+
+        <!-- Prédio -->
+        <div class="col-md-6">
+            <label class="form-label" for="formPredio">
+                Prédio
+            </label>
+
+            <input class="form-control" id="formPredio" name="predio" type="text" maxlength="5"
+                placeholder="Ex: A, B, C" value="{{ form_data.predio|default:'' }}" required>
+
+            <div class="invalid-feedback">
+                Nome do prédio é obrigatório.
+            </div>
+        </div>
+
+        <!-- Andar -->
+        <div class="col-md-6">
+            <label class="form-label" for="formAndar">
+                Andar
+            </label>
+
+            <input class="form-control" id="formAndar" name="andar" type="text" maxlength="5"
+                placeholder="Ex: 1, 2, Térreo" value="{{ form_data.andar|default:'' }}" required>
+
+            <div class="invalid-feedback">
+                Andar é obrigatório.
+            </div>
+        </div>
+
+        <!-- Telefone -->
+        <div class="col-12">
+            <label class="form-label" for="formTelefone">
+                Telefone
+            </label>
+
+            <input class="form-control" id="formTelefone" name="telefone" type="text" maxlength="15" inputmode="numeric"
+                autocomplete="tel" placeholder="(00) 00000-0000" value="{{ form_data.telefone|default:'' }}">
+
+            <div class="invalid-feedback">
+                Telefone é obrigatório.
+            </div>
+
+            <small class="text-muted">
+                O telefone será salvo no sistema apenas com números.
+            </small>
+        </div>
+
+        <!-- Descrição -->
+        <div class="col-12">
+            <label class="form-label" for="formDescricao">
+                Descrição do Local
+            </label>
+
+            <textarea class="form-control" id="formDescricao" name="descricao" rows="3"
+                placeholder="Descreva o local...">{{ form_data.descricao|default:'' }}</textarea>
+
+            <small class="text-muted">
+                Opcional. Use este campo para explicar mais detalhes sobre o local.
+            </small>
+        </div>
+
+        <!-- Sala de Aula -->
+        <div class="col-md-6">
+            <label class="form-label" for="formSalaAula">
+                Sala de Aula
+            </label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="formSalaAula" name="sala_de_aula" 
+                {% if form_data.sala_de_aula %}checked{% endif %}>
+
+                <label class="form-check-label" for="formSalaAula">
+                    É uma sala de aula
+                </label>
+            </div>
+        </div>
+
+        <!-- Laboratório -->
+        <div class="col-md-6">
+            <label class="form-label" for="formLaboratorio">
+                Laboratório
+            </label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="formLaboratorio" name="laboratorio" 
+                {% if form_data.laboratorio %}checked{% endif %}>
+
+                <label class="form-check-label" for="formLaboratorio">
+                    É um laboratório
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary px-4" type="submit">
+            <i class="bi bi-check-circle me-2"></i>
+            Salvar
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'js/formatarTelefone.js' %}"></script>
+
+{% endblock %}

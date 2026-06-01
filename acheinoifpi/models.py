@@ -19,7 +19,7 @@ class Local(models.Model):
     predio = models.CharField("Prédio", max_length=5)
     andar = models.CharField("Andar", max_length=5)
     nome = models.CharField("Nome do local", max_length=25, default="Sala do IFPI")
-    telefone = models.CharField("Telefone do local", max_length=15, blank=True)
+    telefone = models.CharField("Telefone do local", max_length=15, blank=True, null=True)
     descricao = models.TextField("Descrição do local", blank=True, null=True)
     sala_de_aula = models.BooleanField("Sala de aula?", default=False)
     laboratorio = models.BooleanField("Laboratório?", default=False)
@@ -49,7 +49,7 @@ class Local(models.Model):
         locais = type(self).objects.exclude(pk=self.pk)
 
         for numero in range(100):
-            codigo = f"{prefixo}{numero:02d}"
+            codigo = f"{prefixo}{numero:03d}"
 
             if not locais.filter(codigo=codigo).exists():
                 return codigo

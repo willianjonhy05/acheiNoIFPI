@@ -36,3 +36,7 @@ def admin_required(view_func):
 
 def limpar_cpf(cpf):
     return re.sub(r"\D", "", cpf or "")
+
+
+def limpar_telefone(telefone):
+    return re.sub(r"\D", "", telefone or "")

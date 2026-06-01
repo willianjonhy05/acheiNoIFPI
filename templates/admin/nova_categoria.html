@@ -1,0 +1,91 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+
+{% block title %}Nova Categoria{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+
+{% block page_key %}Cadastro{% endblock %}
+
+
+{% block page_title %}Nova Categoria{% endblock %}
+
+{% block heading_actions %} {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+
+{% block conteudo %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} mb-3">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="row g-3">
+
+        <!-- Nome -->
+        <div class="row g-3">
+
+            <!-- Nome -->
+            <div class="col-12">
+                <label class="form-label" for="formName">
+                    Nome da Categoria
+                </label>
+
+                <input class="form-control" id="formName" name="nome" type="text" maxlength="25"
+                    placeholder="Digite o nome da categoria" value="{{ form_data.nome|default:'' }}" required>
+
+                <div class="invalid-feedback">
+                    Nome da categoria é obrigatório.
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <div class="col-12">
+                <label class="form-label" for="formDescricao">
+                    Descrição da Categoria
+                </label>
+
+                <textarea class="form-control" id="formDescricao" name="descricao" rows="3"
+                    placeholder="Descreva a categoria...">{{ form_data.descricao|default:'' }}</textarea>
+
+                <small class="text-muted">
+                    Opcional. Use este campo para explicar quais itens pertencem a esta categoria.
+                </small>
+            </div>
+
+
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary px-4" type="submit">
+                <i class="bi bi-check-circle me-2"></i>
+                Salvar
+            </button>
+        </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+
+
+
+{% endblock %}

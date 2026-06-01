@@ -253,3 +253,27 @@ class Categoria(models.Model):
 
                 if slug_foi_gerado:
                     self.slug = self.gerar_slug_unico()
+
+
+class Atividade(models.Model):
+    CORES = [
+        ("primary", "Azul"),
+        ("success", "Verde"),
+        ("warning", "Amarelo"),
+        ("danger", "Vermelho"),
+        ("info", "Azul claro"),
+        ("secondary", "Cinza"),
+    ]
+
+    titulo = models.CharField("Título", max_length=100)
+    descricao = models.CharField("Descrição", max_length=255)
+    cor = models.CharField("Cor", max_length=20, choices=CORES, default="primary")
+    criado_em = models.DateTimeField("Criado em", auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name = "Atividade"
+        verbose_name_plural = "Atividades"
+        ordering = ["-criado_em"]

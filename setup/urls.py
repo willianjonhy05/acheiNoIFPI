@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login_usuario, dashboard, logout_usuario, home, novo_usuario
+from acheinoifpi.views import login_usuario, dashboard, logout_usuario, home, novo_usuario, nova_categoria
 
 urlpatterns = [
     path("adm/", admin.site.urls),
@@ -11,6 +11,7 @@ urlpatterns = [
     
     # 1º A rota mais longa/específica (usuarios/novo) ANTES da rota geral
     path("dashboard/usuarios/novo/", novo_usuario, name="novo-usuario"),
+    path("dashboard/categorias/novo/", nova_categoria, name="nova-categoria"),
     
     # 2º A rota mais curta do dashboard depois
     path("dashboard/", dashboard, name="admin-dashboard"),

@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
 from .utils import aluno_required, servidor_required, admin_required, limpar_cpf
-from .models import Usuario
+from .models import Usuario, Categoria, Atividade
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 
 def redirecionar_usuario(request, usuario):
     if usuario.is_superuser:
@@ -26,6 +27,60 @@ def redirecionar_usuario(request, usuario):
 def home(request):
     return render(request, "public/em_construcao.html")
 
+
+def nova_categoria(request):
+    if request.method == "POST":
+        nome = request.POST.get("nome", "").strip()
+        descricao = request.POST.get("descricao", "").strip()
+
+        erros = []
+
+        if not nome:
+            erros.append("Nome da categoria é obrigatório.")
+
+        if len(nome) > 25:
+            erros.append("O nome da categoria deve ter no máximo 25 caracteres.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(request, "admin/nova_categoria.html", {
+                "form_data": request.POST
+            })
+
+        try:
+            categoria = Categoria(
+                nome=nome,
+                descricao=descricao or None,
+                ativa=True
+            )
+
+            categoria.save()
+
+            messages.success(
+                request,
+                f"Categoria '{categoria.nome}' cadastrada com sucesso. Código gerado: {categoria.codigo}."
+            )
+
+            return redirect("admin-dashboard")
+
+        except ValidationError as erro:
+            if hasattr(erro, "message_dict"):
+                for campo, mensagens in erro.message_dict.items():
+                    for mensagem in mensagens:
+                        messages.error(request, mensagem)
+            else:
+                for mensagem in erro.messages:
+                    messages.error(request, mensagem)
+
+        except IntegrityError:
+            messages.error(
+                request,
+                "Erro ao salvar categoria. Já existe uma categoria com código ou slug semelhante."
+            )
+
+    return render(request, "admin/nova_categoria.html")
 
 def novo_usuario(request):
     if request.method == "POST":
@@ -141,10 +196,12 @@ def logout_usuario(request):
 def dashboard(request):
     qtde_usuarios = Usuario.objects.count()
     usuarios = Usuario.objects.all()[:5]  # Exemplo: pegar os 5 usuários mais recentes
+    atividades = Atividade.objects.all()[:3]
     
     context = {
         "qtde_usuarios": qtde_usuarios,
         "usuarios": usuarios,
+        "atividades": atividades
     }
     
     return render(request, 'admin/dashboard.html', context)

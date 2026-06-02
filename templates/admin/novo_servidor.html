@@ -1,0 +1,165 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+
+{% block title %}Novo Servidor{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+
+{% block page_key %}Cadastro{% endblock %}
+
+
+{% block page_title %}Novo Servidor{% endblock %}
+
+{% block heading_actions %} {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+
+{% block conteudo %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} mb-3">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <div class="row g-3">
+
+        <!-- Nome -->
+        <div class="col-md-6">
+            <label class="form-label" for="formName">
+                Nome Completo
+            </label>
+            <input class="form-control" id="formName" name="nome" type="text" placeholder="Digite seu nome completo"
+                value="{{ form_data.nome|default:'' }}" required>
+            <div class="invalid-feedback">
+                Nome completo é obrigatório.
+            </div>
+        </div>
+
+        <!-- CPF -->
+        <div class="col-md-6">
+            <label class="form-label" for="formCpf">
+                CPF
+            </label>
+            <input class="form-control" id="formCpf" name="cpf" type="text" placeholder="000.000.000-00" maxlength="14"
+                value="{{ form_data.cpf|default:'' }}" required>
+            <div class="invalid-feedback">
+                CPF válido é obrigatório.
+            </div>
+        </div>
+
+        <!-- Local de Trabalho -->
+        <div class="col-12">
+            <label class="form-label" for="formLocal">
+                Local de Trabalho
+            </label>
+            <select class="form-select" id="formLocal" name="local" required>
+                <option value="">Selecione um Local de Trabalho</option>
+
+                {% for local in locais %}
+                <option value="{{ local.id }}" {% if local.id == local_selecionado %}selected{% endif %}>
+                    {{ local }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <div class="invalid-feedback">
+                Selecione um local de trabalho.
+            </div>
+        </div>
+
+
+        <!-- Data de Nascimento -->
+        <div class="col-md-6">
+            <label class="form-label" for="formDatanasc">
+                Data de Nascimento
+            </label>
+            <input class="form-control" id="formDatanasc" name="data_nascimento" type="date"
+                value="{{ form_data.data_nascimento|default:'' }}" required>
+            <div class="invalid-feedback">
+                Data de nascimento é obrigatória.
+            </div>
+        </div>
+
+        <!-- E-mail -->
+        <div class="col-md-6">
+            <label class="form-label" for="formEmail">
+                E-mail
+            </label>
+            <input class="form-control" id="formEmail" name="email" type="email" placeholder="exemplo@email.com"
+                value="{{ form_data.email|default:'' }}" required>
+            <div class="invalid-feedback">
+                Informe um e-mail válido.
+            </div>
+        </div>
+
+        <!-- Telefone -->
+        <div class="col-12">
+            <label class="form-label" for="formTelefone">
+                Telefone
+            </label>
+            <input class="form-control" id="formTelefone" name="telefone" type="text" placeholder="(00) 00000-0000"
+                value="{{ form_data.telefone|default:'' }}">
+            <div class="invalid-feedback">
+                Informe um telefone válido.
+            </div>
+        </div>
+
+        <!-- Matrícula -->
+        <div class="col-md-6">
+            <label class="form-label" for="formMatricula">
+                Matrícula
+            </label>
+            <input class="form-control" id="formMatricula" name="matricula" type="text"
+                placeholder="Digite sua matrícula" value="{{ form_data.matricula|default:'' }}">
+            <div class="invalid-feedback">
+                A matrícula é obrigatória.
+            </div>
+        </div>
+
+        <!-- Foto -->
+        <div class="col-md-6">
+            <label class="form-label" for="foto">
+                Foto de Perfil
+            </label>
+            <input class="form-control" type="file" id="foto" name="foto" accept="image/*">
+
+            <small class="text-muted">
+                Opcional. Formatos recomendados: JPG, PNG ou WEBP.
+            </small>
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary px-4" type="submit">
+            <i class="bi bi-check-circle me-2"></i>
+            Salvar Cadastro
+        </button>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'js/validarCPF.js' %}"></script>
+<script src="{% static 'js/formatarTelefone.js' %}"></script>
+
+{% endblock %}

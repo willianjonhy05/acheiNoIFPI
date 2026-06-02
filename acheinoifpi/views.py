@@ -89,6 +89,7 @@ def novo_usuario(request):
     if request.method == "POST":
         nome = request.POST.get("nome", "").strip()
         cpf = limpar_cpf(request.POST.get("cpf"))
+        telefone = limpar_telefone(request.POST.get("telefone"))
         data_nascimento = request.POST.get("data_nascimento") or None
         email = request.POST.get("email", "").strip().lower()
         matricula = request.POST.get("matricula", "").strip()
@@ -118,6 +119,9 @@ def novo_usuario(request):
 
         if cpf and Usuario.objects.filter(cpf=cpf).exists():
             erros.append("Já existe um usuário cadastrado com este CPF.")
+            
+        if telefone and len(telefone) not in [10, 11]:
+            erros.append("Telefone inválido. Informe o telefone com DDD.")  
 
         if erros:
             for erro in erros:
@@ -136,6 +140,7 @@ def novo_usuario(request):
                 matricula=matricula,
                 tipo=1,
                 ativo=True,
+                telefone=telefone
             )
 
             if foto:
@@ -151,6 +156,136 @@ def novo_usuario(request):
 
     return render(request, "admin/novo_usuario.html")
 
+
+def novo_servidor(request):
+
+    locais = Local.objects.filter(ativa=True).order_by("nome")
+
+    if request.method == "POST":
+
+        nome = request.POST.get("nome", "").strip()
+        cpf = limpar_cpf(request.POST.get("cpf"))
+        telefone = limpar_telefone(request.POST.get("telefone"))
+        data_nascimento = request.POST.get("data_nascimento") or None
+        email = request.POST.get("email", "").strip().lower()
+        local_selecionado = request.POST.get("local")
+        matricula = request.POST.get("matricula", "").strip()
+        foto = request.FILES.get("foto")
+
+        erros = []
+        local = None
+
+        # Local de trabalho
+        if local_selecionado:
+            try:
+                local = Local.objects.get(pk=int(local_selecionado))
+            except (ValueError, Local.DoesNotExist):
+                erros.append("Local de trabalho inválido.")
+        else:
+            erros.append("Selecione um local de trabalho.")
+
+        # Nome
+        if not nome:
+            erros.append("Nome completo é obrigatório.")
+
+        # CPF
+        if not cpf:
+            erros.append("CPF é obrigatório.")
+        elif len(cpf) != 11:
+            erros.append("CPF inválido. Informe os 11 dígitos.")
+
+        # Data de nascimento
+        if not data_nascimento:
+            erros.append("Data de nascimento é obrigatória.")
+
+        # E-mail
+        if not email:
+            erros.append("E-mail é obrigatório.")
+
+        # Verificações de duplicidade
+        if email and Usuario.objects.filter(email=email).exists():
+            erros.append("Já existe um usuário cadastrado com este e-mail.")
+
+        if cpf and Usuario.objects.filter(cpf=cpf).exists():
+            erros.append("Já existe um usuário cadastrado com este CPF.")
+
+        # Telefone
+        if telefone and len(telefone) not in [10, 11]:
+            erros.append("Telefone inválido. Informe o telefone com DDD.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(
+                request,
+                "admin/novo_servidor.html",
+                {
+                    "form_data": request.POST,
+                    "locais": locais,
+                    "local_selecionado": (
+                        int(local_selecionado)
+                        if local_selecionado and local_selecionado.isdigit()
+                        else None
+                    ),
+                },
+            )
+
+        try:
+            usuario = Usuario(
+                nome=nome,
+                cpf=cpf,
+                data_nascimento=data_nascimento,
+                local=local,
+                email=email,
+                matricula=matricula,
+                tipo=2,
+                ativo=True,
+                telefone=telefone,
+            )
+
+            if foto:
+                usuario.foto = foto
+
+            usuario.save()
+
+            messages.success(
+                request,
+                "Servidor cadastrado com sucesso."
+            )
+
+            return redirect("admin-dashboard")
+
+        except IntegrityError:
+            messages.error(
+                request,
+                "Erro ao salvar. Verifique se CPF ou e-mail já estão cadastrados."
+            )
+
+            return render(
+                request,
+                "admin/novo_servidor.html",
+                {
+                    "form_data": request.POST,
+                    "locais": locais,
+                    "local_selecionado": (
+                        int(local_selecionado)
+                        if local_selecionado and local_selecionado.isdigit()
+                        else None
+                    ),
+                },
+            )
+
+    return render(
+        request,
+        "admin/novo_servidor.html",
+        {
+            "locais": locais,
+            "local_selecionado": None,
+        },
+    )
+    
+    
 def login_usuario(request):
     if request.user.is_authenticated:
         return redirecionar_usuario(request, request.user)
@@ -312,6 +447,10 @@ def dashboard(request):
     }
     
     return render(request, 'admin/dashboard.html', context)
+
+
+def meu_perfil(request):
+    return render(request, "admin/meu_perfil.html")
 
 @aluno_required
 def dashboard_aluno(request):

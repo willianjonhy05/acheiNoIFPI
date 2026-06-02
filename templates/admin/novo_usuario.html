@@ -86,6 +86,18 @@
       </div>
     </div>
 
+    <!-- Telefone -->
+    <div class="col-12">
+      <label class="form-label" for="formTelefone">
+        Telefone
+      </label>
+      <input class="form-control" id="formTelefone" name="telefone" type="text" placeholder="(00) 00000-0000"
+        value="{{ form_data.telefone|default:'' }}">
+      <div class="invalid-feedback">
+        Informe um telefone válido.
+      </div>
+    </div>
+
     <!-- Matrícula -->
     <div class="col-md-6">
       <label class="form-label" for="formMatricula">
@@ -127,5 +139,6 @@
 {% block scripts %}
 
 <script src="{% static 'js/validarCPF.js' %}"></script>
+<script src="{% static 'js/formatarTelefone.js' %}"></script>
 
 {% endblock %}

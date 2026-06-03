@@ -33,7 +33,7 @@
 {% endfor %}
 {% endif %}
 
-<form class="panel needs-validation" method="post" novalidate>
+<form class="panel needs-validation bg-body-tertiary text-body" method="post" novalidate>
     {% csrf_token %}
 
     <div class="row g-3">
@@ -82,6 +82,7 @@
         </div>
 
 </form>
+
 {% endblock %}
 
 {% block scripts %}

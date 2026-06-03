@@ -1657,3 +1657,34 @@ html[data-theme="dark"] {
   border-top-color: var(--admin-sidebar-border);
   color: var(--admin-sidebar-text);
 }
+
+
+/* Força o painel e o formulário a mudarem de cor no modo dark */
+html[data-theme="dark"] .panel {
+  background-color: var(--admin-surface) !important;
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+/* Garante que os inputs do Bootstrap também fiquem escuros */
+html[data-theme="dark"] .form-control {
+  background-color: var(--admin-surface-soft);
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+html[data-theme="dark"] .form-control:focus {
+  background-color: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+/* Garante que as labels fiquem claras no modo escuro */
+html[data-theme="dark"] .form-label {
+  color: var(--admin-text) !important;
+}
+
+/* Deixa o texto de ajuda (descrição opcional) legível */
+html[data-theme="dark"] .text-muted, 
+html[data-theme="dark"] .form-text {
+  color: var(--admin-muted) !important;
+}

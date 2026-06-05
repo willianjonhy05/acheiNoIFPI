@@ -125,7 +125,16 @@ class Usuario(AbstractUser):
                 break
 
         return username
-    
+
+    @property
+    def primeiro_nome(self):
+        if self.nome:
+            return self.nome.split()[0]
+        elif self.email:
+            return self.email.split("@")[0]
+        else:
+            return self.username
+            
     
     def gerar_senha_padrao(self):
         if self.cpf:
@@ -279,3 +288,39 @@ class Atividade(models.Model):
         verbose_name = "Atividade"
         verbose_name_plural = "Atividades"
         ordering = ["-criado_em"]
+        
+class Item(models.Model):
+    
+    STATUS = [
+        (1, "Perdido"),
+        (2, "Encontrado"),
+        (3, "Devolvido"),
+        (4, "Outro"),
+    ]
+    
+    uuid = models.CharField("UUID", max_length=36, unique=True, blank=True)
+    usuario_registro = models.ForeignKey(Usuario, on_delete=models.SET_NULL, related_name='usuario_registro', verbose_name="Usuário responsável", blank=True, null=True)
+    dono = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='itens_recuperados', verbose_name="Dono do item")
+    tamanho = models.CharField("Tamanho do item", max_length=20, blank=True, null=True)
+    cor = models.CharField("Cor do item", max_length=20, blank=True, null=True)
+    material = models.CharField("Material do item", max_length=50, blank=True, null=True)   
+    codigo = models.CharField("Código do item", max_length=10, unique=True, blank=True)
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Categoria")
+    marca_ou_modelo = models.CharField("Marca ou modelo do item", max_length=50, blank=True, null=True)
+    nome = models.CharField("Nome do item", max_length=100, blank=True, null=True)
+    local = models.ForeignKey(Local, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Local que foi encontrado")
+    data_registro = models.DateTimeField("Data de registro", auto_now_add=True)
+    data_devolucao = models.DateTimeField("Data de devolução", blank=True, null=True)
+    data_atualizacao = models.DateTimeField("Data de atualização", auto_now=True)
+    ativo = models.BooleanField("Ativo", default=True)
+    foto = models.ImageField("Foto do item", upload_to="itens/fotos/", blank=True, null=True)
+    descricao = models.TextField("Descrição do item", blank=True, null=True)
+    ativo = models.BooleanField("Ativo", default=True)
+    status = models.IntegerField("Status", choices=STATUS, default=1)
+
+    def __str__(self):
+        return self.categoria.nome if self.categoria else f"Item {self.id}"
+
+    class Meta:
+        verbose_name = "Item"
+        verbose_name_plural = "Itens"

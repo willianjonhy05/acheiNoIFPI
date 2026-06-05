@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Local, Usuario, Categoria
+from .models import Local, Usuario, Categoria, Item
 
 
 @admin.register(Local)
@@ -222,3 +222,85 @@ class UsuarioAdmin(UserAdmin):
             )
         }),
     )
+    
+    
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    # Campos exibidos na lista do admin
+    list_display = (
+        'id',
+        'nome',
+        'categoria',
+        'status',
+        'usuario_registro',
+        'dono',
+        'local',
+        'data_registro',
+        'data_devolucao',
+        'ativo',
+    )
+
+    # Campos clicáveis que levam para o detalhe do objeto
+    list_display_links = ('id', 'nome',)
+
+    # Filtros laterais
+    list_filter = (
+        'status',
+        'categoria',
+        'local',
+        'ativo',
+        'data_registro',
+    )
+
+    # Campos pesquisáveis
+    search_fields = (
+        'nome',
+        'descricao',
+        'codigo',
+        'marca_ou_modelo',
+        'usuario_registro__username',
+        'dono__username',
+    )
+
+    # Campos de edição rápida na lista
+    list_editable = ('status', 'ativo',)
+
+    # Campos de visualização no detalhe do item
+    fieldsets = (
+        ('Informações gerais', {
+            'fields': (
+                'uuid',
+                'codigo',
+                'nome',
+                'descricao',
+                'foto',
+                'status',
+                'ativo',
+            )
+        }),
+        ('Detalhes do item', {
+            'fields': (
+                'categoria',
+                'tamanho',
+                'cor',
+                'material',
+                'marca_ou_modelo',
+            )
+        }),
+        ('Registro e usuários', {
+            'fields': (
+                'usuario_registro',
+                'dono',
+                'local',
+                'data_registro',
+                'data_atualizacao',
+                'data_devolucao',
+            )
+        }),
+    )
+
+    # Ordenação padrão
+    ordering = ('-data_registro',)
+
+    # Campos de leitura apenas
+    readonly_fields = ('uuid', 'data_registro', 'data_atualizacao')

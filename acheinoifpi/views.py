@@ -19,7 +19,7 @@ def redirecionar_usuario(request, usuario):
     tipo = getattr(usuario, "tipo", None)
 
     if tipo == 1:
-        return redirect("dashboard_aluno")
+        return redirect("dashboard-aluno")
 
     if tipo == 2:
         return redirect("dashboard_servidor")
@@ -454,12 +454,12 @@ def meu_perfil(request):
 
 @aluno_required
 def dashboard_aluno(request):
-    return render(request, "aluno/dashboard.html")
+    return render(request, "admin/dashboard_aluno.html")
 
 
 @servidor_required
 def dashboard_servidor(request):
-    return render(request, "servidor/dashboard.html")
+    return render(request, "admin/dashboard_servidor.html")
 
 
 @admin_required

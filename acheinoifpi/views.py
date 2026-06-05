@@ -31,6 +31,7 @@ def home(request):
     return render(request, "public/em_construcao.html")
 
 
+@servidor_required
 def nova_categoria(request):
     if request.method == "POST":
         nome = request.POST.get("nome", "").strip()
@@ -85,6 +86,7 @@ def nova_categoria(request):
 
     return render(request, "admin/nova_categoria.html")
 
+@servidor_required
 def novo_usuario(request):
     if request.method == "POST":
         nome = request.POST.get("nome", "").strip()
@@ -156,7 +158,7 @@ def novo_usuario(request):
 
     return render(request, "admin/novo_usuario.html")
 
-
+@servidor_required
 def novo_servidor(request):
 
     locais = Local.objects.filter(ativa=True).order_by("nome")
@@ -324,7 +326,9 @@ def login_usuario(request):
     return render(request, "admin/login.html", {
         "next_url": next_url,
     })
-    
+
+
+@servidor_required    
 def novo_local(request):
     if request.method == "POST":
         nome = request.POST.get("nome", "").strip()
@@ -435,6 +439,8 @@ def logout_usuario(request):
     messages.success(request, "Você saiu do sistema com segurança.")
     return redirect("entrar")
 
+
+@servidor_required
 def dashboard(request):
     qtde_usuarios = Usuario.objects.count()
     usuarios = Usuario.objects.all()[:5]  # Exemplo: pegar os 5 usuários mais recentes

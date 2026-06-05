@@ -1,6 +1,12 @@
 from django.shortcuts import redirect
 from django.contrib import messages
 import re
+from django.contrib.auth.decorators import user_passes_test
+from functools import wraps
+from django.shortcuts import render
+import string
+import random
+
 
 def aluno_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -40,3 +46,28 @@ def limpar_cpf(cpf):
 
 def limpar_telefone(telefone):
     return re.sub(r"\D", "", telefone or "")
+
+
+
+def servidor_required(view_func):
+    """
+    Permite acesso apenas para:
+    - Usuários do tipo Servidor (tipo=2)
+    - Superusuários (is_superuser=True)
+    Se não autorizado, exibe página de 'Acesso negado'.
+    """
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated and (request.user.tipo == 2 or request.user.is_superuser):
+            return view_func(request, *args, **kwargs)
+        return render(request, "public/acesso_negado.html", status=403)
+    return _wrapped_view
+
+
+def gerar_codigo_aleatorio(length=6):
+    """
+    Gera um código aleatório com letras maiúsculas e números.
+    Exemplo: 'A4B9C1'
+    """
+    chars = string.ascii_uppercase + string.digits
+    return ''.join(random.choices(chars, k=length))

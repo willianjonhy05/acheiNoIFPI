@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 import unicodedata
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
-
+from .utils import gerar_codigo_aleatorio
 # Create your models here.
 
 
@@ -324,3 +324,14 @@ class Item(models.Model):
     class Meta:
         verbose_name = "Item"
         verbose_name_plural = "Itens"
+        
+        
+    def save(self, *args, **kwargs):
+        # Gerar código automaticamente se estiver em branco
+        if not self.codigo:
+            codigo = gerar_codigo_aleatorio()
+            # Garante que não exista duplicado
+            while Item.objects.filter(codigo=codigo).exists():
+                codigo = gerar_codigo_aleatorio()
+            self.codigo = codigo
+        super().save(*args, **kwargs)        

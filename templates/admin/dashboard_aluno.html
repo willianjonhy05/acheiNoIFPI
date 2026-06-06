@@ -94,7 +94,7 @@
 
           <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
             <input class="form-control search-input" type="search"
-              placeholder="Pesquise por usuários ou objetos perdidos" aria-label="Search">
+              placeholder="Digite seu termo de busca..." aria-label="Search">
           </form>
 
           <div class="navbar-actions ms-auto">
@@ -168,10 +168,15 @@
                   que foram encontrados.{% endblock %}</p>
               </div>
             </div>
-            <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm"
-                type="button"><i class="bi bi-download" aria-hidden="true"></i> Exportar</button><button
+           
+                {% block heading_actions %}
+
+
+                <i class="bi bi-download" aria-hidden="true"></i> Exportar</button><button
                 class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
-                Item Perdido</button></div>
+                Item Perdido</button>
+              {% endblock %}
+              
           </div>
 
      

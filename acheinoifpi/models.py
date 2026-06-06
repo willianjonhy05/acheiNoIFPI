@@ -6,6 +6,8 @@ import unicodedata
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from .utils import gerar_codigo_aleatorio
+import uuid
+
 # Create your models here.
 
 
@@ -326,12 +328,17 @@ class Item(models.Model):
         verbose_name_plural = "Itens"
         
         
+
     def save(self, *args, **kwargs):
+        # Gera UUID se não tiver
+        if not self.uuid:
+            self.uuid = str(uuid.uuid4())
+
         # Gerar código automaticamente se estiver em branco
         if not self.codigo:
             codigo = gerar_codigo_aleatorio()
-            # Garante que não exista duplicado
             while Item.objects.filter(codigo=codigo).exists():
                 codigo = gerar_codigo_aleatorio()
             self.codigo = codigo
-        super().save(*args, **kwargs)        
+
+        super().save(*args, **kwargs)

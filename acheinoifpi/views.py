@@ -578,6 +578,15 @@ def cadastrar_pedido_de_busca(request):
     categorias = Categoria.objects.filter(ativa=True).order_by("nome")
     locais = Local.objects.filter(ativa=True).order_by("nome")
     
+    context = {
+        "categorias": categorias,
+        "locais": locais,
+        "form_data": {},
+        "categoria_selecionada": "",
+        "local_selecionado": "",
+    }
+    
+    
     if request.method == "POST":
         titulo = request.POST.get("titulo", "").strip()
         categoria_id = request.POST.get("categoria", "").strip()
@@ -644,27 +653,19 @@ def cadastrar_pedido_de_busca(request):
         messages.success(request, "Objeto encontrado cadastrado com sucesso.")
         return redirect("meus-pedidos-de-busca")    
     
-    context = {
-        "categorias": categorias,
-        "locais": locais,
-        "form_data": {},
-        "categoria_selecionada": "",
-        "local_selecionado": "",
-    }
+
     
     return render(request, "usuarios/cadastrar_pedido_de_busca.html", context)
 
 @usuario_required
 def meus_pedidos_de_busca(request):
-    
-    usuario = request.user
-    pedidos = Item.objects.filter(dono=usuario).order_by("-data_registro")
-    
-    context = {
+    pedidos = Item.objects.filter(
+        dono=request.user
+    ).order_by("-data_registro")
+
+    return render(request, "usuarios/meus_pedidos_de_busca.html", {
         "pedidos": pedidos
-    }
-    
-    return render(request, "usuarios/meus_pedidos_de_busca.html", context)
+    })
 
 
 @servidor_required

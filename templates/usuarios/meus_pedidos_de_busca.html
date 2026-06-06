@@ -1,36 +1,109 @@
 {% extends 'admin/dashboard_aluno.html' %}
 {% load static %}
 
-
 {% block title %}Meus Pedidos de Busca{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
 {% endblock %}
 
-
 {% block page_key %}Listagem{% endblock %}
-
 
 {% block page_title %}Meus Pedidos de Busca{% endblock %}
 
-{% block heading_actions %} <a href="{% url 'cadastrar-pedido-de-busca' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"
-        aria-hidden="true"></i> Novo Item</a> {% endblock %}
+{% block heading_actions %}
+<a href="{% url 'cadastrar-pedido-de-busca' %}" >
+    <button class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"> Novo Pedido</i></button>
+</a>
 
-{% block dados %} {% endblock %}
+{% endblock %}
 
+{% block dados %}{% endblock %}
+{% block graficos %}{% endblock %}
+{% block tabelas %}{% endblock %}
 
-{% block graficos %} {% endblock %}
-
-{% block tabelas %} {% endblock %}
 {% block conteudo %}
 
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mb-3">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
+<div class="panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Objeto</th>
+                    <th>Categoria</th>
+                    <th>Tamanho</th>
+                    <th>Cor</th>
+                    <th>Local</th>
+                    <th>Status</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
 
+            <tbody>
+                {% for item in pedidos %}
+                    <tr>
+                        <td>
+                            {% if item.foto %}
+                                <img src="{{ item.foto.url }}" alt="{{ item.nome }}" width="56" height="56"
+                                     style="object-fit: cover; border-radius: 8px;">
+                            {% else %}
+                                <span class="text-muted">Sem foto</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <strong>{{ item.nome }}</strong>
+                            {% if item.descricao %}
+                                <div class="text-muted small">
+                                    {{ item.descricao|truncatechars:60 }}
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ item.categoria.nome|default:"-" }}</td>
+                        <td>{{ item.tamanho|default:"-" }}</td>
+                        <td>{{ item.cor|default:"-" }}</td>
+                        <td>{{ item.local.nome|default:"-" }}</td>
+
+                        <td>
+                            {% if item.status == 1 %}
+                                <span class="badge bg-warning text-dark">Perdido</span>
+                            {% elif item.status == 2 %}
+                                <span class="badge bg-success">Encontrado</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Indefinido</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if item.data_registro %}
+                                {{ item.data_registro|date:"d/m/Y" }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            Você ainda não cadastrou nenhum pedido de busca.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
-{% block scripts %}
 
-
-
-{% endblock %}
+{% block scripts %}{% endblock %}

@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login as auth_login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
 from .utils import aluno_required, servidor_required, admin_required, limpar_cpf, limpar_telefone
 from .models import Usuario, Categoria, Atividade, Local
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 def redirecionar_usuario(request, usuario):
     if usuario.is_superuser:
@@ -29,6 +30,46 @@ def redirecionar_usuario(request, usuario):
 
 def home(request):
     return render(request, "public/em_construcao.html")
+
+
+@servidor_required
+def listar_categorias(request):
+    termo = request.GET.get("q", "").strip()
+
+    categorias = Categoria.objects.all().order_by("nome")
+
+    if termo:
+        categorias = categorias.filter(
+            Q(nome__icontains=termo) |
+            Q(codigo__icontains=termo)
+        )
+
+    paginator = Paginator(categorias, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "categorias": page_obj.object_list,
+        "page_obj": page_obj,
+        "termo": termo,
+    }
+
+    return render(request, "admin/listar_categorias.html", context)
+
+
+@servidor_required
+def alterar_status_categoria(request, slug):
+    categoria = get_object_or_404(Categoria, slug=slug)
+
+    categoria.ativa = not categoria.ativa
+    categoria.save(update_fields=["ativa"])
+
+    if categoria.ativa:
+        messages.success(request, f'Categoria "{categoria.nome}" ativada com sucesso.')
+    else:
+        messages.success(request, f'Categoria "{categoria.nome}" desativada com sucesso.')
+
+    return redirect("listar_categorias")
 
 
 @servidor_required

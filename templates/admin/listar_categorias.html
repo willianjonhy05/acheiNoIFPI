@@ -1,0 +1,201 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+
+{% block title %}Categorias{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+
+{% block page_key %}Listagem{% endblock %}
+
+
+{% block page_title %}Categorias{% endblock %}
+
+{% block heading_actions %} <a href="{% url 'nova-categoria' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"
+        aria-hidden="true"></i> Nova Categoria</a> {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+{% block conteudo %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-3">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<section class="row g-4">
+    <div class="col-12">
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="h5 mb-1 section-title">
+                        <i class="bi bi-list-task" aria-hidden="true"></i>
+                        <span>Lista de categorias</span>
+                    </h2>
+                    <p class="text-muted mb-0">
+                        Use a busca para filtrar por nome ou código da categoria.
+                    </p>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    Quantidade:
+                    <span class="badge text-bg-secondary">
+                        {% if page_obj %}
+                            {{ page_obj.paginator.count }}
+                        {% else %}
+                            {{ categorias|length }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+    
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Categoria/Código</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col" colspan="2" class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for categoria in categorias %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="nav-icon">
+                                            <i class="bi bi-tags" aria-hidden="true"></i>
+                                        </span>
+
+                                        <div>
+                                            <p class="fw-semibold mb-0">{{ categoria.nome }}</p>
+                                            <p class="text-muted small mb-0">{{ categoria.codigo }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {% if categoria.ativa %}
+                                        <span class="badge text-bg-success">Ativa</span>
+                                    {% else %}
+                                        <span class="badge text-bg-danger">Inativa</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ categoria.descricao|default:"-" }}
+                                </td>
+
+                                <td class="text-end">
+                                    <form method="post" action="{% url 'alterar-status-categoria' categoria.slug %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+                                        {% if categoria.ativa %}
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Desativar
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                Ativar
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                                        Editar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    Nenhuma categoria encontrada.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if page_obj %}
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted small">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </div>
+
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ termo|urlencode }}&page=1">
+                                        Primeira
+                                    </a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ termo|urlencode }}&page={{ page_obj.previous_page_number }}">
+                                        Anterior
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">Primeira</span>
+                                </li>
+
+                                <li class="page-item disabled">
+                                    <span class="page-link">Anterior</span>
+                                </li>
+                            {% endif %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ termo|urlencode }}&page={{ page_obj.next_page_number }}">
+                                        Próxima
+                                    </a>
+                                </li>
+
+                                <li class="page-item">
+                                    <a class="page-link" href="?q={{ termo|urlencode }}&page={{ page_obj.paginator.num_pages }}">
+                                        Última
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">Próxima</span>
+                                </li>
+
+                                <li class="page-item disabled">
+                                    <span class="page-link">Última</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</section>
+
+{% endblock %}
+{% block scripts %}
+
+
+
+{% endblock %}

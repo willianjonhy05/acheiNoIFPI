@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login_usuario, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor
+from acheinoifpi.views import login_usuario, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor, EsqueciMinhaSenhaView, SenhaResetEnviadaView, RedefinirSenhaView, SenhaResetFinalizadaView
 
 urlpatterns = [
     path("adm/", admin.site.urls),
@@ -24,6 +24,12 @@ urlpatterns = [
     # 2º A rota mais curta do dashboard depois
     path("dashboard/perfil/", meu_perfil, name="meu-perfil"),
     path("dashboard/", dashboard, name="admin-dashboard"),
+    
+    path("dashboard/perfil/esqueci-minha-senha/", EsqueciMinhaSenhaView.as_view(), name="esqueci-minha-senha"),
+    path("dashboard/perfil/senha-reset/enviada/", SenhaResetEnviadaView.as_view(), name="senha-reset-enviada"),
+    path("dashboard/perfil/senha-reset/<uidb64>/<token>/", RedefinirSenhaView.as_view(), name="redefinir-senha"),
+    path("dashboard/perfil/senha-reset/finalizada/", SenhaResetFinalizadaView.as_view(), name="senha-reset-finalizada"),
+    
     
     # 3º A raiz do site por último
     path("", home, name="home"),

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senha redefinida | Achei no IFPI</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body class="admin-login-page">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="{% static 'img/logo/achei-no-ifpi.png' %}" alt="Logo Achei no IFPI">
+                </div>
+
+                <h1>Senha redefinida</h1>
+                <p>Sua senha foi alterada com sucesso. Agora você já pode acessar o sistema.</p>
+            </div>
+
+            <a href="{% url 'entrar' %}" class="login-btn">
+                <span>Ir para o login</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-mail enviado | Achei no IFPI</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body class="admin-login-page">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="{% static 'img/logo/achei-no-ifpi.png' %}" alt="Logo Achei no IFPI">
+                </div>
+
+                <h1>Verifique seu e-mail</h1>
+                <p>
+                    Se o e-mail informado estiver cadastrado e ativo, enviaremos um link para redefinir sua senha.
+                </p>
+            </div>
+
+            <div class="login-footer">
+                <a href="{% url 'entrar' %}">
+                    <i class="fas fa-chevron-left"></i>
+                    Voltar para o login
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

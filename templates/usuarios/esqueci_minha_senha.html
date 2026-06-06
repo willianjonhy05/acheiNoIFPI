@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar senha | Achei no IFPI</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body class="admin-login-page">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="{% static 'img/logo/achei-no-ifpi.png' %}" alt="Logo Achei no IFPI">
+                </div>
+
+                <h1>Recuperar senha</h1>
+                <p>Informe seu e-mail cadastrado para receber o link de redefinição.</p>
+            </div>
+
+            <form method="POST" class="login-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="login-alert error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="login-form-group">
+                    <label for="id_email">E-mail</label>
+                    <div class="login-input-container">
+                        <i class="fas fa-envelope"></i>
+                        <input
+                            type="email"
+                            name="email"
+                            id="id_email"
+                            placeholder="Digite seu e-mail"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    {% if form.email.errors %}
+                        <div class="login-alert error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            {{ form.email.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span>Enviar link de recuperação</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a href="{% url 'entrar' %}">
+                    <i class="fas fa-chevron-left"></i>
+                    Voltar para o login
+                </a>
+            </div>
+        </div>
+
+        <p class="login-copyright">
+            &copy; <span id="ano-atual"></span> Achei no IFPI - Área Restrita
+        </p>
+    </div>
+
+    <script src="{% static 'js/obterAno.js' %}"></script>
+
+</body>
+</html>

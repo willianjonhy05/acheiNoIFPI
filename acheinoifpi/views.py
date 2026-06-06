@@ -10,6 +10,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from .forms import UsuarioPasswordResetForm
+from django.urls import reverse_lazy
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
+
+
 
 def redirecionar_usuario(request, usuario):
     if usuario.is_superuser:
@@ -512,3 +522,36 @@ def dashboard_servidor(request):
 @admin_required
 def dashboard_admin(request):
     return render(request, "admin/dashboard.html")
+
+
+class EsqueciMinhaSenhaView(PasswordResetView):
+    template_name = "usuarios/esqueci_minha_senha.html"
+    email_template_name = "usuarios/emails/redefinir_senha_email.html"
+    subject_template_name = "usuarios/emails/redefinir_senha_assunto.txt"
+    success_url = reverse_lazy("senha-reset-enviada")
+    form_class = UsuarioPasswordResetForm
+    extra_context = {
+        "titulo": "Recuperar senha"
+    }
+
+
+class SenhaResetEnviadaView(PasswordResetDoneView):
+    template_name = "usuarios/senha_reset_enviada.html"
+
+
+class RedefinirSenhaView(PasswordResetConfirmView):
+    template_name = "usuarios/redefinir_senha.html"
+    success_url = reverse_lazy("senha-reset-finalizada")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if hasattr(self.user, "senha_alterada"):
+            self.user.senha_alterada = True
+            self.user.save(update_fields=["senha_alterada"])
+
+        return response
+
+
+class SenhaResetFinalizadaView(PasswordResetCompleteView):
+    template_name = "usuarios/senha_reset_finalizada.html"

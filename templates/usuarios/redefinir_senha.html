@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova senha | Achei no IFPI</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body class="admin-login-page">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="{% static 'img/logo/achei-no-ifpi.png' %}" alt="Logo Achei no IFPI">
+                </div>
+
+                <h1>Definir nova senha</h1>
+
+                {% if validlink %}
+                    <p>Digite sua nova senha nos campos abaixo.</p>
+                {% else %}
+                    <p>Este link de redefinição é inválido ou já foi utilizado.</p>
+                {% endif %}
+            </div>
+
+            {% if validlink %}
+                <form method="POST" class="login-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="login-alert error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="login-form-group">
+                        <label for="id_new_password1">Nova senha</label>
+                        <div class="login-input-container">
+                            <i class="fas fa-lock"></i>
+                            <input
+                                type="password"
+                                name="new_password1"
+                                id="id_new_password1"
+                                placeholder="Digite a nova senha"
+                                required
+                            >
+                        </div>
+
+                        {% if form.new_password1.errors %}
+                            <div class="login-alert error">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ form.new_password1.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="login-form-group">
+                        <label for="id_new_password2">Confirmar nova senha</label>
+                        <div class="login-input-container">
+                            <i class="fas fa-lock"></i>
+                            <input
+                                type="password"
+                                name="new_password2"
+                                id="id_new_password2"
+                                placeholder="Confirme a nova senha"
+                                required
+                            >
+                        </div>
+
+                        {% if form.new_password2.errors %}
+                            <div class="login-alert error">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {{ form.new_password2.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        <span>Salvar nova senha</span>
+                        <i class="fas fa-check"></i>
+                    </button>
+                </form>
+            {% else %}
+                <div class="login-footer">
+                    <a href="{% url 'esqueci-minha-senha' %}">
+                        Solicitar novo link
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

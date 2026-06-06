@@ -1,0 +1,11 @@
+Olá, {{ user.primeiro_nome }}.
+
+Recebemos uma solicitação para redefinir a senha da sua conta no Achei no IFPI.
+
+Para criar uma nova senha, acesse o link abaixo:
+
+{{ protocol }}://{{ domain }}{% url 'redefinir-senha' uidb64=uid token=token %}
+
+Se você não solicitou essa alteração, ignore este e-mail.
+
+Equipe Achei no IFPI.

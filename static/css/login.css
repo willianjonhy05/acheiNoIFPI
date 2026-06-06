@@ -222,3 +222,22 @@
         padding: 30px 20px;
     }
 }
+
+
+.login-form-links {
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
+.login-form-links a {
+    color: var(--login-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-form-links a:hover {
+    color: var(--login-accent);
+    text-decoration: underline;
+}

@@ -64,6 +64,22 @@ def servidor_required(view_func):
     return _wrapped_view
 
 
+def usuario_required(view_func):
+    """
+    Permite acesso apenas para:
+    - Usuários do tipo Aluno (tipo=1)
+    - Superusuários (is_superuser=True)
+    Se não autorizado, exibe página de 'Acesso negado'.
+    """
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated and (request.user.tipo == 1 or request.user.is_superuser):
+            return view_func(request, *args, **kwargs)
+        return render(request, "public/acesso_negado.html", status=403)
+    return _wrapped_view
+
+
+
 def gerar_codigo_aleatorio(length=6):
     """
     Gera um código aleatório com letras maiúsculas e números.
@@ -71,3 +87,14 @@ def gerar_codigo_aleatorio(length=6):
     """
     chars = string.ascii_uppercase + string.digits
     return ''.join(random.choices(chars, k=length))
+
+
+def buscar_objeto_ativo_por_id(modelo, id_objeto):
+    if not id_objeto:
+        return None
+
+    try:
+        return modelo.objects.filter(id=int(id_objeto), ativa=True).first()
+    except (TypeError, ValueError):
+        return None
+

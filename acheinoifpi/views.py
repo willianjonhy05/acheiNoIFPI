@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-from .utils import aluno_required, servidor_required, admin_required, limpar_cpf, limpar_telefone
-from .models import Usuario, Categoria, Atividade, Local
+from .utils import aluno_required, servidor_required, admin_required, limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id, usuario_required
+from .models import Usuario, Categoria, Atividade, Local, Item
 from django.db import IntegrityError
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.paginator import Paginator
@@ -489,6 +489,182 @@ def logout_usuario(request):
     logout(request)
     messages.success(request, "Você saiu do sistema com segurança.")
     return redirect("entrar")
+
+@servidor_required
+def cadastrar_item_encontrado(request):
+    categorias = Categoria.objects.filter(ativa=True).order_by("nome")
+    locais = Local.objects.filter(ativa=True).order_by("nome")
+
+    context = {
+        "categorias": categorias,
+        "locais": locais,
+        "form_data": {},
+        "categoria_selecionada": "",
+        "local_selecionado": "",
+    }
+
+    if request.method == "POST":
+        titulo = request.POST.get("titulo", "").strip()
+        categoria_id = request.POST.get("categoria", "").strip()
+        local_id = request.POST.get("local", "").strip()
+        tamanho = request.POST.get("tamanho", "").strip()
+        cor = request.POST.get("cor", "").strip()
+        material = request.POST.get("material", "").strip()
+        marca_modelo = request.POST.get("marca_modelo", "").strip()
+        descricao = request.POST.get("descricao", "").strip()
+        foto = request.FILES.get("foto")
+
+        context.update({
+            "form_data": request.POST,
+            "categoria_selecionada": categoria_id,
+            "local_selecionado": local_id,
+        })
+
+        categoria = buscar_objeto_ativo_por_id(Categoria, categoria_id)
+
+        local = None
+        if local_id:
+            local = buscar_objeto_ativo_por_id(Local, local_id)
+
+        erros = []
+
+        if not titulo:
+            erros.append("O título do objeto é obrigatório.")
+
+        if not categoria:
+            erros.append("Selecione uma categoria válida.")
+
+        if not tamanho:
+            erros.append("O tamanho do objeto é obrigatório.")
+
+        if not cor:
+            erros.append("A cor do objeto é obrigatória.")
+
+        if local_id and not local:
+            erros.append("Selecione um local válido.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(request, "admin/cadastrar_objeto_encontrado.html", context)
+
+        Item.objects.create(
+            nome=titulo,
+            categoria=categoria,
+            local=local,
+            tamanho=tamanho,
+            cor=cor,
+            material=material,
+            marca_ou_modelo=marca_modelo,
+            descricao=descricao,
+            foto=foto,
+            status=2,
+
+            # Usuário autenticado
+            usuario_registro=request.user,
+        )
+
+        messages.success(request, "Objeto encontrado cadastrado com sucesso.")
+        return redirect("itens-encontrados")
+
+    return render(request, "admin/cadastrar_objeto_encontrado.html", context)
+
+def itens_encontrados(request):
+    return render(request, "admin/itens_encontrados.html")
+
+@usuario_required
+def cadastrar_pedido_de_busca(request):
+    categorias = Categoria.objects.filter(ativa=True).order_by("nome")
+    locais = Local.objects.filter(ativa=True).order_by("nome")
+    
+    if request.method == "POST":
+        titulo = request.POST.get("titulo", "").strip()
+        categoria_id = request.POST.get("categoria", "").strip()
+        local_id = request.POST.get("local", "").strip()
+        tamanho = request.POST.get("tamanho", "").strip()
+        cor = request.POST.get("cor", "").strip()
+        material = request.POST.get("material", "").strip()
+        marca_modelo = request.POST.get("marca_modelo", "").strip()
+        descricao = request.POST.get("descricao", "").strip()
+        foto = request.FILES.get("foto")
+
+        context.update({
+            "form_data": request.POST,
+            "categoria_selecionada": categoria_id,
+            "local_selecionado": local_id,
+        })
+
+        categoria = buscar_objeto_ativo_por_id(Categoria, categoria_id)
+
+        local = None
+        if local_id:
+            local = buscar_objeto_ativo_por_id(Local, local_id)
+
+        erros = []
+
+        if not titulo:
+            erros.append("O título do objeto é obrigatório.")
+
+        if not categoria:
+            erros.append("Selecione uma categoria válida.")
+
+        if not tamanho:
+            erros.append("O tamanho do objeto é obrigatório.")
+
+        if not cor:
+            erros.append("A cor do objeto é obrigatória.")
+
+        if local_id and not local:
+            erros.append("Selecione um local válido.")
+
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+
+            return render(request, "usuarios/cadastrar_pedido_de_busca.html", context)
+
+        Item.objects.create(
+            nome=titulo,
+            categoria=categoria,
+            local=local,
+            tamanho=tamanho,
+            cor=cor,
+            material=material,
+            marca_ou_modelo=marca_modelo,
+            descricao=descricao,
+            foto=foto,
+            status=1,
+
+            # Usuário autenticado
+            usuario_registro=request.user,
+            dono = request.user,
+        )
+
+        messages.success(request, "Objeto encontrado cadastrado com sucesso.")
+        return redirect("meus-pedidos-de-busca")    
+    
+    context = {
+        "categorias": categorias,
+        "locais": locais,
+        "form_data": {},
+        "categoria_selecionada": "",
+        "local_selecionado": "",
+    }
+    
+    return render(request, "usuarios/cadastrar_pedido_de_busca.html", context)
+
+@usuario_required
+def meus_pedidos_de_busca(request):
+    
+    usuario = request.user
+    pedidos = Item.objects.filter(dono=usuario).order_by("-data_registro")
+    
+    context = {
+        "pedidos": pedidos
+    }
+    
+    return render(request, "usuarios/meus_pedidos_de_busca.html", context)
 
 
 @servidor_required

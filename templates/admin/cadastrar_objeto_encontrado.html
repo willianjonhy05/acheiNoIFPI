@@ -1,0 +1,220 @@
+{% extends 'admin/dashboard.html' %}
+{% load static %}
+
+{% block title %}Novo Objeto Encontrado{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+{% block page_key %}Cadastro{% endblock %}
+
+{% block page_title %}Novo Objeto Encontrado{% endblock %}
+
+{% block heading_actions %}{% endblock %}
+{% block dados %}{% endblock %}
+{% block graficos %}{% endblock %}
+{% block tabelas %}{% endblock %}
+
+{% block conteudo %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mb-3">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form class="panel needs-validation" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <div class="row g-3">
+
+        <div class="col-12">
+            <label class="form-label" for="formTitulo">
+                Título do Objeto Encontrado
+            </label>
+            <input 
+                class="form-control" 
+                id="formTitulo" 
+                name="titulo" 
+                type="text"
+                placeholder="Digite o título do objeto encontrado"
+                value="{{ form_data.titulo|default:'' }}" 
+                required
+            >
+            <div class="invalid-feedback">
+                O título do objeto encontrado é obrigatório.
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label" for="formCategoria">
+                Categoria do Objeto
+            </label>
+            <select class="form-select" id="formCategoria" name="categoria" required>
+                <option value="">Selecione uma categoria</option>
+
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}" 
+                        {% if categoria.id|stringformat:"s" == categoria_selecionada %}selected{% endif %}>
+                        {{ categoria.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <div class="invalid-feedback">
+                Selecione uma categoria.
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <label class="form-label" for="formTamanho">
+                Tamanho
+            </label>
+            <input 
+                class="form-control" 
+                id="formTamanho" 
+                name="tamanho" 
+                type="text"
+                placeholder="Ex: pequeno, médio, grande"
+                value="{{ form_data.tamanho|default:'' }}"
+            required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" for="formCor">
+                Cor
+            </label>
+            <input 
+                class="form-control" 
+                id="formCor" 
+                name="cor" 
+                type="text"
+                placeholder="Ex: preto, azul, vermelho"
+                value="{{ form_data.cor|default:'' }}"
+            required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" for="formMaterial">
+                Material
+            </label>
+            <input 
+                class="form-control" 
+                id="formMaterial" 
+                name="material" 
+                type="text"
+                placeholder="Ex: couro, plástico, tecido"
+                value="{{ form_data.material|default:'' }}"
+            required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" for="formMarcaModelo">
+                Marca/Modelo
+            </label>
+            <input 
+                class="form-control" 
+                id="formMarcaModelo" 
+                name="marca_modelo" 
+                type="text"
+                placeholder="Ex: Samsung, Nike, Dell"
+                value="{{ form_data.marca_modelo|default:'' }}"
+            >
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label" for="formFoto">
+                Foto do Objeto Encontrado
+            </label>
+            <input 
+                class="form-control" 
+                type="file" 
+                id="formFoto" 
+                name="foto" 
+                accept="image/*"
+            >
+
+            <small class="text-muted">
+                Opcional. Formatos recomendados: JPG, PNG ou WEBP.
+            </small>
+        </div>
+
+
+        <div class="col-md-6">
+            <label class="form-label" for="formLocal">
+                Local onde foi encontrado
+            </label>
+            <select class="form-select" id="formLocal" name="local">
+                <option value="">Selecione um local</option>
+
+                {% for local in locais %}
+                    <option value="{{ local.id }}" 
+                        {% if local.id|stringformat:"s" == local_selecionado %}selected{% endif %}>
+                        {{ local.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <div class="invalid-feedback">
+                Selecione o local onde o objeto foi encontrado.
+            </div>
+
+
+              <small class="text-muted">
+                Se souber onde o objeto foi encontrado, selecione o local. Caso contrário, deixe em branco.
+            </small>
+        </div>
+
+
+        <div class="col-12">
+            <label class="form-label" for="formDescricao">
+                Descrição
+            </label>
+            <textarea 
+                class="form-control" 
+                id="formDescricao" 
+                name="descricao" 
+                placeholder="Descreva detalhes importantes do objeto encontrado"
+                rows="4"
+            >{{ form_data.descricao|default:'' }}</textarea>
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary px-4" type="submit">
+            <i class="bi bi-check-circle me-2"></i>
+            Salvar Cadastro
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (() => {
+        'use strict';
+
+        const forms = document.querySelectorAll('.needs-validation');
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

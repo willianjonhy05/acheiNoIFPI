@@ -1,0 +1,36 @@
+{% extends 'admin/dashboard_aluno.html' %}
+{% load static %}
+
+
+{% block title %}Meus Pedidos de Busca{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/novo_usuario.css' %}">
+{% endblock %}
+
+
+{% block page_key %}Listagem{% endblock %}
+
+
+{% block page_title %}Meus Pedidos de Busca{% endblock %}
+
+{% block heading_actions %} <a href="{% url 'cadastrar-pedido-de-busca' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"
+        aria-hidden="true"></i> Novo Item</a> {% endblock %}
+
+{% block dados %} {% endblock %}
+
+
+{% block graficos %} {% endblock %}
+
+{% block tabelas %} {% endblock %}
+{% block conteudo %}
+
+
+
+
+{% endblock %}
+{% block scripts %}
+
+
+
+{% endblock %}

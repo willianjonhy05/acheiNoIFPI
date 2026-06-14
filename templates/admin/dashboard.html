@@ -6,15 +6,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Dashboard | Achei no IFPI{% endblock %}</title>
-  
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-  integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
-  
+    integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous">
+
   <meta name="theme-color" content="#257c34">
-  
+
   <meta property="og:type" content="website">
   <meta property="og:title" content="Achei no IFPI - Quem perdeu, procura e acha aqui!">
   <meta property="og:description" content="O maior portal de busca e localização de objetos perdidos do IFPI.">
@@ -23,7 +23,8 @@
   <link rel="icon" href="{% static 'img/icon/achei-no-ifpi32x32.png' %}" sizes="32x32" />
   <link rel="icon" href="{% static 'img/icon/achei-no-ifpi192x192.png' %}" sizes="192x192" />
 
-  <meta property="og:image" content="acheinoifpi.vps7985.panel.icontainer.cloud/static/img/logo/thumbnail_achei_no_ifpi.png">
+  <meta property="og:image"
+    content="acheinoifpi.vps7985.panel.icontainer.cloud/static/img/logo/thumbnail_achei_no_ifpi.png">
 
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   {% block css %}
@@ -48,43 +49,58 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a class="nav-link active" href="#" aria-current="page">
-          <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'admin-dashboard' %}active{% endif %}"
+          href="{% url 'admin-dashboard' %}">
+          <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
           <span class="nav-text">Painel</span>
         </a>
-        <a class="nav-link" href="{% url 'listar-usuarios' %}">
-          <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'listar-usuarios' %}active{% endif %}"
+          href="{% url 'listar-usuarios' %}">
+          <span class="nav-icon"><i class="bi bi-people"></i></span>
           <span class="nav-text">Usuários</span>
         </a>
-        <a class="nav-link" href="{% url 'listar-itens' %}">
-          <span class="nav-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'listar-itens' %}active{% endif %}"
+          href="{% url 'listar-itens' %}">
+          <span class="nav-icon"><i class="bi bi-box-seam"></i></span>
           <span class="nav-text">Itens</span>
         </a>
-          <a class="nav-link" href="#">
-          <span class="nav-icon"><i class="bi bi-pin-map-fill" aria-hidden="true"></i></span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'listar-locais' %}active{% endif %}"
+          href="{% url 'listar-locais' %}">
+          <span class="nav-icon"><i class="bi bi-pin-map-fill"></i></span>
           <span class="nav-text">Locais</span>
         </a>
 
-        <a class="nav-link" href="{% url 'listar_categorias' %}">
-          <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
+        <a class="nav-link {% if request.resolver_match.url_name == 'listar_categorias' %}active{% endif %}"
+          href="{% url 'listar_categorias' %}">
+          <span class="nav-icon"><i class="bi bi-grid-3x3-gap"></i></span>
           <span class="nav-text">Categorias</span>
         </a>
-        
-        <a class="nav-link" href="#">
-          <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
-          <span class="nav-text">Devolvidos</span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'meus-pedidos-de-busca' %}active{% endif %}"
+          href="{% url 'meus-pedidos-de-busca' %}">
+          <span class="nav-icon"><i class="bi bi-card-list"></i></span>
+          <span class="nav-text">Atividades</span>
         </a>
-        <a class="nav-link" href="#">
-          <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'meu-perfil' %}active{% endif %}"
+          href="{% url 'meu-perfil' %}">
+          <span class="nav-icon"><i class="bi bi-gear"></i></span>
           <span class="nav-text">Configurações</span>
         </a>
+
       </nav>
 
       <div class="sidebar-user">
         {% if request.user.foto %}
-          <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ request.user.foto.url }}" alt="{{ request.user.primeiro_nome }}">
+        <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ request.user.foto.url }}"
+          alt="{{ request.user.primeiro_nome }}">
         {% else %}
-          <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}" alt="{{ request.user.primeiro_nome }}">
+        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}"
+          alt="{{ request.user.primeiro_nome }}">
         {% endif %}
         <strong>{{ request.user.primeiro_nome }}</strong>
         <small>Sistema ativo</small>
@@ -107,8 +123,8 @@
           </button>
 
           <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
-            <input class="form-control search-input" name="q" type="search"
-              placeholder="Digite seu termo de busca..." aria-label="Search">
+            <input class="form-control search-input" name="q" type="search" placeholder="Digite seu termo de busca..."
+              aria-label="Search">
           </form>
 
           <div class="navbar-actions ms-auto">
@@ -143,9 +159,11 @@
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 {% if request.user.foto %}
-                  <img class="avatar-img avatar-sm" src="{{ request.user.foto.url }}" alt="{{ request.user.primeiro_nome }}">
+                <img class="avatar-img avatar-sm" src="{{ request.user.foto.url }}"
+                  alt="{{ request.user.primeiro_nome }}">
                 {% else %}
-                  <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="{{ request.user.primeiro_nome }}">
+                <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}"
+                  alt="{{ request.user.primeiro_nome }}">
                 {% endif %}
                 <span class="profile-name d-none d-sm-inline">{{ request.user.primeiro_nome }}</span>
               </button>
@@ -212,7 +230,7 @@
                   <span class="metric-label">Buscas Totais</span>
                   <span class="metric-icon"><i class="bi bi-bag-check" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">1.284</div>                
+                <div class="metric-value">1.284</div>
               </article>
             </div>
 
@@ -232,7 +250,7 @@
                   <span class="metric-label">Sem donos</span>
                   <span class="metric-icon"><i class="bi bi-life-preserver" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">6</div>                
+                <div class="metric-value">6</div>
               </article>
             </div>
           </section>

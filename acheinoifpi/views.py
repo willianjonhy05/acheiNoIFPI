@@ -67,6 +67,30 @@ def listar_categorias(request):
 
 
 @servidor_required
+def listar_locais(request):
+    termo = request.GET.get("q", "").strip()
+
+    locais = Local.objects.all().order_by("nome")
+
+    if termo:
+        locais = locais.filter(
+            Q(nome__icontains=termo) |
+            Q(predio__icontains=termo)
+        )
+
+    # 🔥 usando sua função de paginação
+    page_obj = paginar_queryset(request, locais, por_pagina=10)
+
+    context = {
+        "locais": page_obj,  # já pode iterar direto no template
+        "page_obj": page_obj,
+        "termo": termo,
+    }
+
+    return render(request, "admin/listar_locais.html", context)
+
+
+@servidor_required
 def alterar_status_categoria(request, slug):
     categoria = get_object_or_404(Categoria, slug=slug)
 
@@ -440,7 +464,7 @@ def novo_local(request):
                 f"Local '{local.nome}' cadastrado com sucesso. Código gerado: {local.codigo}."
             )
 
-            return redirect(request.path)
+            return redirect("listar-locais")
 
         except ValidationError as erro:
             if hasattr(erro, "message_dict"):
@@ -869,9 +893,9 @@ def detalhe_item(request, codigo):
 
 
 @servidor_required
-def itens_por_categoria(request, categoria_id):
+def itens_por_categoria(request, slug):
 
-    categoria = get_object_or_404(Categoria, id=categoria_id)
+    categoria = get_object_or_404(Categoria, slug=slug)
 
     itens = Item.objects.select_related(
         "usuario_registro",
@@ -891,7 +915,6 @@ def itens_por_categoria(request, categoria_id):
             Q(tamanho__icontains=search)
         )
 
-    # 📄 paginação usando sua função reutilizável
     page_obj = paginar_queryset(request, itens, por_pagina=10)
 
     context = {

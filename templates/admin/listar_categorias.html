@@ -25,13 +25,6 @@
 {% block tabelas %} {% endblock %}
 {% block conteudo %}
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} mb-3">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
 
 <section class="row g-4">
     <div class="col-12">

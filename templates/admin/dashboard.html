@@ -41,7 +41,7 @@
         <a class="brand-mark" href="#" aria-label="adminHMD dashboard">
           <img src="{% static 'img/logo/achei-no-ifpi.png' %}" width="70" alt="Logo Achei no IFPI">
           <span class="brand-copy">
-            <span class="brand-title">Administrador</span>
+            <span class="brand-title">{{ request.user.primeiro_nome }}</span>
             <span class="brand-subtitle">Tela Administrativa</span>
           </span>
         </a>
@@ -65,7 +65,7 @@
           <span class="nav-text">Locais</span>
         </a>
 
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'listar_categorias' %}">
           <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
           <span class="nav-text">Categorias</span>
         </a>
@@ -84,8 +84,12 @@
       </nav>
 
       <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}" alt="Administrador">
-        <strong>Administrador</strong>
+        {% if request.user.foto %}
+          <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ request.user.foto.url }}" alt="{{ request.user.primeiro_nome }}">
+        {% else %}
+          <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}" alt="{{ request.user.primeiro_nome }}">
+        {% endif %}
+        <strong>{{ request.user.primeiro_nome }}</strong>
         <small>Sistema ativo</small>
       </div>
 
@@ -141,8 +145,12 @@
             <div class="dropdown">
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="Administrador">
-                <span class="profile-name d-none d-sm-inline">Administrador</span>
+                {% if request.user.foto %}
+                  <img class="avatar-img avatar-sm" src="{{ request.user.foto.url }}" alt="{{ request.user.primeiro_nome }}">
+                {% else %}
+                  <img class="avatar-img avatar-sm" src="{% static 'img/perfil.png' %}" alt="{{ request.user.primeiro_nome }}">
+                {% endif %}
+                <span class="profile-name d-none d-sm-inline">{{ request.user.primeiro_nome }}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Perfil</a></li>

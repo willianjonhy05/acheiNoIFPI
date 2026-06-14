@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-from .utils import aluno_required, servidor_required, admin_required, limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id, usuario_required
+from .utils import limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id
+from .decorators import aluno_required, servidor_required, admin_required, usuario_required
 from .models import Usuario, Categoria, Atividade, Local, Item
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -33,7 +34,7 @@ def redirecionar_usuario(request, usuario):
         return redirect("dashboard-aluno")
 
     if tipo == 2:
-        return redirect("dashboard_servidor")
+        return redirect("dashboard-servidor")
 
     messages.error(request, "Tipo de usuário inválido.")
     return redirect("entrar")
@@ -686,7 +687,7 @@ def dashboard(request):
 def meu_perfil(request):
     return render(request, "admin/meu_perfil.html")
 
-@aluno_required
+# @aluno_required
 def dashboard_aluno(request):
     return render(request, "admin/dashboard_aluno.html")
 

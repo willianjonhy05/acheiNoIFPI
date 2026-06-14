@@ -171,10 +171,13 @@
            
                 {% block heading_actions %}
 
-
-                <i class="bi bi-download" aria-hidden="true"></i> Exportar</button><button
-                class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
-                Item Perdido</button>
+                <a href="{% url 'cadastrar-pedido-de-busca' %}">
+                  <button
+                    class="btn btn-primary btn-sm" type="button">
+                    <i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
+                    Item Perdido
+                  </button>
+                </a>
               {% endblock %}
               
           </div>

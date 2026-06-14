@@ -226,7 +226,7 @@ class UsuarioAdmin(UserAdmin):
     
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    # Campos exibidos na lista do admin
+    
     list_display = (
         'id',
         'nome',
@@ -240,10 +240,8 @@ class ItemAdmin(admin.ModelAdmin):
         'ativo',
     )
 
-    # Campos clicáveis que levam para o detalhe do objeto
     list_display_links = ('id', 'nome',)
 
-    # Filtros laterais
     list_filter = (
         'status',
         'categoria',
@@ -252,7 +250,6 @@ class ItemAdmin(admin.ModelAdmin):
         'data_registro',
     )
 
-    # Campos pesquisáveis
     search_fields = (
         'nome',
         'descricao',
@@ -262,10 +259,8 @@ class ItemAdmin(admin.ModelAdmin):
         'dono__username',
     )
 
-    # Campos de edição rápida na lista
     list_editable = ('status', 'ativo',)
 
-    # Campos de visualização no detalhe do item
     fieldsets = (
         ('Informações gerais', {
             'fields': (
@@ -299,8 +294,6 @@ class ItemAdmin(admin.ModelAdmin):
         }),
     )
 
-    # Ordenação padrão
     ordering = ('-data_registro',)
 
-    # Campos de leitura apenas
     readonly_fields = ('uuid', 'data_registro', 'data_atualizacao')

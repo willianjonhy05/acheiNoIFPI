@@ -1,4 +1,3 @@
-from django.shortcuts import render
 import random
 from django.db import models, transaction, IntegrityError
 from django.contrib.auth.models import AbstractUser

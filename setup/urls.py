@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login_usuario, meus_pedidos_de_busca, cadastrar_pedido_de_busca, itens_encontrados, cadastrar_item_encontrado, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor, EsqueciMinhaSenhaView, SenhaResetEnviadaView, RedefinirSenhaView, SenhaResetFinalizadaView
+from acheinoifpi.views import login_usuario, listar_usuarios, meus_pedidos_de_busca, cadastrar_pedido_de_busca, itens_encontrados, cadastrar_item_encontrado, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor, EsqueciMinhaSenhaView, SenhaResetEnviadaView, RedefinirSenhaView, SenhaResetFinalizadaView
 
 urlpatterns = [
     path("adm/", admin.site.urls),
@@ -20,6 +20,7 @@ urlpatterns = [
     path("dashboard/itens-encontrados/novo/", cadastrar_item_encontrado, name="cadastrar-item-encontrado"),
     path("dashboard/itens-encontrados/", itens_encontrados, name="itens-encontrados"),
     
+    path("dashboard/usuarios/", listar_usuarios, name="listar-usuarios"),  
     path("dashboard/usuarios/novo/", novo_usuario, name="novo-usuario"),
     path("dashboard/servidores/novo/", novo_servidor, name="novo-servidor"),
     path("dashboard/categorias/", listar_categorias, name="listar_categorias"),

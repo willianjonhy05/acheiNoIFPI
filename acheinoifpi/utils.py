@@ -1,6 +1,7 @@
 import re
 import string
 import random
+from django.core.paginator import Paginator
 
 
 def limpar_cpf(cpf):
@@ -28,3 +29,14 @@ def buscar_objeto_ativo_por_id(modelo, id_objeto):
         return modelo.objects.filter(id=int(id_objeto), ativa=True).first()
     except (TypeError, ValueError):
         return None
+    
+    
+def paginar_queryset(request, queryset, por_pagina=10):
+    """
+    Função reutilizável para paginação.
+    Exibe 10 registros por página por padrão.
+    """
+    paginator = Paginator(queryset, por_pagina)
+    numero_pagina = request.GET.get("page")
+    page_obj = paginator.get_page(numero_pagina)
+    return page_obj

@@ -2,15 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-from .utils import limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id
+from .utils import limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id, paginar_queryset
 from .decorators import aluno_required, servidor_required, admin_required, usuario_required
 from .models import Usuario, Categoria, Atividade, Local, Item
 from django.db import IntegrityError
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 from .forms import UsuarioPasswordResetForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import (
@@ -34,7 +33,7 @@ def redirecionar_usuario(request, usuario):
         return redirect("dashboard-aluno")
 
     if tipo == 2:
-        return redirect("dashboard-servidor")
+        return redirect("admin-dashboard")
 
     messages.error(request, "Tipo de usuário inválido.")
     return redirect("entrar")
@@ -55,12 +54,11 @@ def listar_categorias(request):
             Q(codigo__icontains=termo)
         )
 
-    paginator = Paginator(categorias, 10)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    # 🔥 usando sua função de paginação
+    page_obj = paginar_queryset(request, categorias, por_pagina=10)
 
     context = {
-        "categorias": page_obj.object_list,
+        "categorias": page_obj,  # já pode iterar direto no template
         "page_obj": page_obj,
         "termo": termo,
     }
@@ -571,6 +569,63 @@ def cadastrar_item_encontrado(request):
 
     return render(request, "admin/cadastrar_objeto_encontrado.html", context)
 
+@servidor_required
+def listar_usuarios(request):
+
+    pesquisa = request.GET.get("q", "").strip()
+    tipo = request.GET.get("tipo", "").strip()
+
+    # 🔥 QUERY BASE COM ESTATÍSTICAS DOS ITENS
+    usuarios = Usuario.objects.annotate(
+        quantidade_itens=Count("usuario_registro", distinct=True),
+
+        perdidos=Count(
+            "usuario_registro",
+            filter=Q(usuario_registro__status=1)
+        ),
+
+        encontrados=Count(
+            "usuario_registro",
+            filter=Q(usuario_registro__status=2)
+        ),
+
+        devolvidos=Count(
+            "usuario_registro",
+            filter=Q(usuario_registro__status=3)
+        ),
+
+        outros=Count(
+            "usuario_registro",
+            filter=Q(usuario_registro__status=4)
+        ),
+    ).order_by("nome")
+
+    # 🔍 FILTRO DE BUSCA
+    if pesquisa:
+        usuarios = usuarios.filter(
+            Q(nome__icontains=pesquisa) |
+            Q(email__icontains=pesquisa) |
+            Q(username__icontains=pesquisa) |
+            Q(matricula__icontains=pesquisa) |
+            Q(cpf__icontains=pesquisa)
+        )
+
+    # 🎯 FILTRO POR TIPO
+    if tipo in ["1", "2"]:
+        usuarios = usuarios.filter(tipo=int(tipo))
+
+    # 📄 PAGINAÇÃO
+    page_obj = paginar_queryset(request, usuarios, por_pagina=10)
+
+    context = {
+        "usuarios": page_obj,
+        "page_obj": page_obj,
+        "pesquisa": pesquisa,
+        "tipo_selecionado": tipo,
+    }
+
+    return render(request, "admin/listar_usuarios.html", context)
+
 def itens_encontrados(request):
     return render(request, "admin/itens_encontrados.html")
 
@@ -687,7 +742,7 @@ def dashboard(request):
 def meu_perfil(request):
     return render(request, "admin/meu_perfil.html")
 
-# @aluno_required
+@aluno_required
 def dashboard_aluno(request):
     return render(request, "admin/dashboard_aluno.html")
 
@@ -697,7 +752,7 @@ def dashboard_servidor(request):
     return render(request, "admin/dashboard_servidor.html")
 
 
-@admin_required
+@servidor_required
 def dashboard_admin(request):
     return render(request, "admin/dashboard.html")
 

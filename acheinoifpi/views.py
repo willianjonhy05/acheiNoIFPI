@@ -565,7 +565,7 @@ def cadastrar_item_encontrado(request):
         )
 
         messages.success(request, "Objeto encontrado cadastrado com sucesso.")
-        return redirect("itens-encontrados")
+        return redirect("listar-itens")
 
     return render(request, "admin/cadastrar_objeto_encontrado.html", context)
 
@@ -788,3 +788,117 @@ class RedefinirSenhaView(PasswordResetConfirmView):
 
 class SenhaResetFinalizadaView(PasswordResetCompleteView):
     template_name = "usuarios/senha_reset_finalizada.html"
+    
+    
+    
+    
+@servidor_required
+def listar_itens(request):
+
+    search = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "").strip()
+    categoria = request.GET.get("categoria", "").strip()
+
+    itens = Item.objects.select_related(
+        "usuario_registro",
+        "categoria"
+    ).all().order_by("-data_registro")
+
+    if search:
+        itens = itens.filter(
+            Q(nome__icontains=search) |
+            Q(codigo__icontains=search) |
+            Q(marca_ou_modelo__icontains=search) |
+            Q(cor__icontains=search) |
+            Q(tamanho__icontains=search)
+        )
+
+    if status in ["1", "2", "3", "4"]:
+        itens = itens.filter(status=int(status))
+
+    if categoria:
+        itens = itens.filter(categoria_id=categoria)
+
+    page_obj = paginar_queryset(request, itens, por_pagina=10)
+
+    context = {
+        "itens": page_obj,
+        "page_obj": page_obj,
+        "search": search,
+        "status_selecionado": status,
+        "categoria_selecionada": categoria,
+        "categorias": Categoria.objects.all(),
+    }
+
+    return render(request, "admin/listar_itens.html", context)
+
+
+@servidor_required
+def detalhe_item(request, codigo):
+
+    item = get_object_or_404(
+        Item.objects.select_related(
+            "usuario_registro",
+            "dono",
+            "categoria",
+            "local"
+        ),
+        codigo=codigo
+    )
+
+    if request.method == "POST":
+        novo_status = request.POST.get("status")
+
+        if novo_status in ["1", "2", "3", "4"]:
+            item.status = int(novo_status)
+
+            if int(novo_status) == 3:  # devolvido
+                from django.utils import timezone
+                item.data_devolucao = timezone.now()
+
+            item.save()
+
+            return redirect("detalhe-item", codigo=item.codigo)
+
+    context = {
+        "item": item,
+        "status_choices": Item.STATUS
+    }
+
+    return render(request, "admin/detalhe_item.html", context)
+
+
+@servidor_required
+def itens_por_categoria(request, categoria_id):
+
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+
+    itens = Item.objects.select_related(
+        "usuario_registro",
+        "categoria"
+    ).filter(
+        categoria=categoria
+    ).order_by("-data_registro")
+
+    search = request.GET.get("q", "").strip()
+
+    if search:
+        itens = itens.filter(
+            Q(nome__icontains=search) |
+            Q(codigo__icontains=search) |
+            Q(marca_ou_modelo__icontains=search) |
+            Q(cor__icontains=search) |
+            Q(tamanho__icontains=search)
+        )
+
+    # 📄 paginação usando sua função reutilizável
+    page_obj = paginar_queryset(request, itens, por_pagina=10)
+
+    context = {
+        "categoria": categoria,
+        "itens": page_obj,
+        "page_obj": page_obj,
+        "search": search,
+    }
+
+    return render(request, "admin/itens_por_categoria.html", context)

@@ -137,7 +137,23 @@ def editar_local(request, codigo):
 
     local.save()
 
+    messages.success(request, "Local atualizado com sucesso.")
+
     return redirect(request.POST.get("next", "listar-locais"))
+
+@servidor_required
+@require_POST
+def editar_categoria(request, slug):
+    categoria = get_object_or_404(Categoria, slug=slug)
+
+    categoria.nome = request.POST.get("nome")
+    categoria.descricao = request.POST.get("descricao")
+
+    categoria.save()
+
+    messages.success(request, "Categoria atualizada com sucesso.")
+
+    return redirect(request.POST.get("next", "listar_categorias"))
 
 @servidor_required
 def nova_categoria(request):

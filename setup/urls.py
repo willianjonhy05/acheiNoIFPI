@@ -2,14 +2,17 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-from acheinoifpi.views import login_usuario, listar_locais, detalhe_item, listar_itens, itens_por_categoria, listar_usuarios, meus_pedidos_de_busca, cadastrar_pedido_de_busca, itens_encontrados, cadastrar_item_encontrado, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor, EsqueciMinhaSenhaView, SenhaResetEnviadaView, RedefinirSenhaView, SenhaResetFinalizadaView
+from acheinoifpi.views import login_usuario, atualizar_perfil, listar_atividades, editar_local, alterar_status_local, listar_locais, detalhe_item, listar_itens, itens_por_categoria, listar_usuarios, meus_pedidos_de_busca, cadastrar_pedido_de_busca, itens_encontrados, cadastrar_item_encontrado, dashboard, alterar_status_categoria, listar_categorias, meu_perfil, novo_servidor, logout_usuario, home, novo_usuario, nova_categoria, novo_local, alterar_senha, dashboard_aluno, dashboard_servidor, EsqueciMinhaSenhaView, SenhaResetEnviadaView, RedefinirSenhaView, SenhaResetFinalizadaView
 
 urlpatterns = [
     path("adm/", admin.site.urls),
     path("entrar/", login_usuario, name="entrar"),
     path("logout/", logout_usuario, name="logout"),
-    
+    path("dashboard/locais/<str:codigo>/alterar-status/", alterar_status_local, name="alterar-status-local"),
+    path("dashboard/locais/<str:codigo>/editar/", editar_local, name="editar-local"),
     # 1º A rota mais longa/específica (usuarios/novo) ANTES da rota geral
+    
+    path("dashboard/atividades/", listar_atividades, name="listar-atividades"),
     
     
     
@@ -31,6 +34,7 @@ urlpatterns = [
     path("dashboard/categorias/<slug:slug>/alterar-status/", alterar_status_categoria, name="alterar-status-categoria"),
     path("dashboard/locais/novo/", novo_local, name="novo-local"),
     path("dashboard/perfil/alterar-senha/", alterar_senha, name="alterar_senha"),
+    path("dashboard/perfil/atualizar/", atualizar_perfil, name="atualizar-perfil"),
     
     path("dashboard/aluno/", dashboard_aluno, name="dashboard-aluno"),
     path("dashboard/servidor/", dashboard_servidor, name="dashboard-servidor"),

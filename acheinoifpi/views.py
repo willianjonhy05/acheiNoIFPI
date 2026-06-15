@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
 from .utils import limpar_cpf, limpar_telefone, buscar_objeto_ativo_por_id, paginar_queryset
 from .decorators import aluno_required, servidor_required, admin_required, usuario_required
 from .models import Usuario, Categoria, Atividade, Local, Item
@@ -104,6 +105,39 @@ def alterar_status_categoria(request, slug):
 
     return redirect("listar_categorias")
 
+
+@servidor_required
+def alterar_status_local(request, codigo):
+    local = get_object_or_404(Local, codigo=codigo)
+
+    local.ativa = not local.ativa
+    local.save(update_fields=["ativa"])
+
+    if local.ativa:
+        messages.success(request, f'Local "{local.nome}" ativado com sucesso.')
+    else:
+        messages.success(request, f'Local "{local.nome}" desativado com sucesso.')
+
+    return redirect("listar-locais")
+
+
+@servidor_required
+@require_POST
+def editar_local(request, codigo):
+    local = get_object_or_404(Local, codigo=codigo)
+
+    local.nome = request.POST.get("nome")
+    local.predio = request.POST.get("predio")
+    local.andar = request.POST.get("andar")
+    local.telefone = request.POST.get("telefone")
+    local.descricao = request.POST.get("descricao")
+
+    local.sala_de_aula = True if request.POST.get("sala_de_aula") == "on" else False
+    local.laboratorio = True if request.POST.get("laboratorio") == "on" else False
+
+    local.save()
+
+    return redirect(request.POST.get("next", "listar-locais"))
 
 @servidor_required
 def nova_categoria(request):
@@ -751,11 +785,15 @@ def meus_pedidos_de_busca(request):
 @servidor_required
 def dashboard(request):
     qtde_usuarios = Usuario.objects.count()
-    usuarios = Usuario.objects.all()[:5]  # Exemplo: pegar os 5 usuários mais recentes
+    qtde_itens_encontrados = Item.objects.filter(status=2).count()
+    qtde_itens_devolvidos = Item.objects.filter(status=3).count()
+    usuarios = Usuario.objects.all()[:5]  
     atividades = Atividade.objects.all()[:3]
     
     context = {
         "qtde_usuarios": qtde_usuarios,
+        "qtde_itens_encontrados": qtde_itens_encontrados,
+        "qtde_itens_devolvidos": qtde_itens_devolvidos,
         "usuarios": usuarios,
         "atividades": atividades
     }
@@ -763,8 +801,31 @@ def dashboard(request):
     return render(request, 'admin/dashboard.html', context)
 
 
+@login_required
 def meu_perfil(request):
-    return render(request, "admin/meu_perfil.html")
+    return render(request, "admin/perfil.html", {
+        "usuario": request.user
+    })
+    
+    
+@login_required
+def atualizar_perfil(request):
+    usuario = request.user
+
+    if request.method == "POST":
+        usuario.telefone = request.POST.get("telefone")
+        usuario.matricula = request.POST.get("matricula")
+
+        # FOTO (upload seguro)
+        if "foto" in request.FILES:
+            usuario.foto = request.FILES["foto"]
+
+        usuario.save()
+
+        messages.success(request, "Perfil atualizado com sucesso.")
+        return redirect("meu-perfil")
+
+    return redirect("meu-perfil")
 
 @aluno_required
 def dashboard_aluno(request):
@@ -925,3 +986,27 @@ def itens_por_categoria(request, slug):
     }
 
     return render(request, "admin/itens_por_categoria.html", context)
+
+
+@servidor_required
+def listar_atividades(request):
+    termo = request.GET.get("q", "").strip()
+
+    atividades = Atividade.objects.all().order_by("titulo")
+
+    if termo:
+        atividades = atividades.filter(
+            Q(titulo__icontains=termo) |
+            Q(descricao__icontains=termo)
+        )
+
+    # 🔥 usando sua função de paginação
+    page_obj = paginar_queryset(request, atividades, por_pagina=10)
+
+    context = {
+        "atividades": page_obj,  # já pode iterar direto no template
+        "page_obj": page_obj,
+        "termo": termo,
+    }
+
+    return render(request, "admin/listar_atividades.html", context)

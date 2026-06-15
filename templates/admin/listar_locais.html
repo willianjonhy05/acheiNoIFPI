@@ -14,8 +14,8 @@
 
 {% block page_title %}Locais{% endblock %}
 
-{% block heading_actions %} <a href="{% url 'novo-local' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-plus"
-        aria-hidden="true"></i> Novo Local</a> {% endblock %}
+{% block heading_actions %} <a href="{% url 'novo-local' %}" class="btn btn-outline-secondary btn-sm"><i
+        class="bi bi-plus" aria-hidden="true"></i> Novo Local</a> {% endblock %}
 
 {% block dados %} {% endblock %}
 
@@ -24,7 +24,6 @@
 
 {% block tabelas %} {% endblock %}
 {% block conteudo %}
-
 
 <section class="row g-4">
     <div class="col-12">
@@ -47,9 +46,9 @@
                     Quantidade:
                     <span class="badge text-bg-secondary">
                         {% if page_obj %}
-                            {{ page_obj.paginator.count }}
+                        {{ page_obj.paginator.count }}
                         {% else %}
-                            {{ locais|length }}
+                        {{ locais|length }}
                         {% endif %}
                     </span>
                 </div>
@@ -75,7 +74,6 @@
                         {% for local in locais %}
                         <tr>
 
-                            <!-- NOME + CÓDIGO -->
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-geo-alt"></i>
@@ -87,60 +85,59 @@
                                 </div>
                             </td>
 
-                            <!-- PRÉDIO -->
                             <td>{{ local.predio }}</td>
 
-                            <!-- ANDAR -->
                             <td>{{ local.andar }}</td>
 
-                            <!-- STATUS -->
                             <td>
                                 {% if local.ativa %}
-                                    <span class="badge text-bg-success">Ativo</span>
+                                <span class="badge text-bg-success">Ativo</span>
                                 {% else %}
-                                    <span class="badge text-bg-danger">Inativo</span>
+                                <span class="badge text-bg-danger">Inativo</span>
                                 {% endif %}
                             </td>
 
-                            <!-- TIPO -->
                             <td>
                                 {% if local.laboratorio %}
-                                    <span class="badge text-bg-warning">Laboratório</span>
+                                <span class="badge text-bg-warning">Laboratório</span>
                                 {% elif local.sala_de_aula %}
-                                    <span class="badge text-bg-primary">Sala de Aula</span>
+                                <span class="badge text-bg-primary">Sala de Aula</span>
                                 {% else %}
-                                    <span class="badge text-bg-secondary">Outro</span>
+                                <span class="badge text-bg-secondary">Outro</span>
                                 {% endif %}
                             </td>
 
-                            <!-- AÇÕES -->
                             <td class="text-end">
+                                <div class="d-flex justify-content-end gap-1">
 
-                                <form method="post" action="#">
-                                    {% csrf_token %}
+                                    <form method="post" action="{% url 'alterar-status-local' local.codigo %}"
+                                        class="m-0">
+                                        {% csrf_token %}
 
-                                    {% if local.ativa %}
+                                        {% if local.ativa %}
                                         <button class="btn btn-danger btn-sm" type="submit">
                                             Desativar
                                         </button>
-                                    {% else %}
+                                        {% else %}
                                         <button class="btn btn-success btn-sm" type="submit">
                                             Ativar
                                         </button>
-                                    {% endif %}
-                                </form>
+                                        {% endif %}
+                                    </form>
 
-                                <a href="#" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </a>
+                                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#modalEdit{{ local.pk }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
 
+                                </div>
                             </td>
 
                         </tr>
 
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="text-center">
+                            <td colspan="6" class="text-center py-4">
                                 Nenhum local encontrado.
                             </td>
                         </tr>
@@ -150,6 +147,125 @@
 
                 </table>
             </div>
+
+            {% for local in locais %}
+
+            <div class="modal fade" id="modalEdit{{ local.pk }}" tabindex="-1" aria-hidden="true">
+
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <form method="post" action="{% url 'editar-local' local.pk %}">
+
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    Editar Local
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Nome
+                                        </label>
+
+                                        <input type="text" name="nome" class="form-control" value="{{ local.nome }}">
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">
+                                            Prédio
+                                        </label>
+
+                                        <input type="text" name="predio" class="form-control"
+                                            value="{{ local.predio }}">
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">
+                                            Andar
+                                        </label>
+
+                                        <input type="text" name="andar" class="form-control" value="{{ local.andar }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Telefone
+                                        </label>
+
+                                        <input type="text" name="telefone" class="form-control"
+                                            value="{{ local.telefone }}">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label class="form-label">
+                                            Descrição
+                                        </label>
+
+                                        <textarea name="descricao" class="form-control"
+                                            rows="4">{{ local.descricao }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+
+                                            <input class="form-check-input" type="checkbox" name="sala_de_aula"
+                                                id="sala{{ local.pk }}" {% if local.sala_de_aula %}checked{% endif %}>
+
+                                            <label class="form-check-label" for="sala{{ local.pk }}">
+                                                Sala de Aula
+                                            </label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+
+                                            <input class="form-check-input" type="checkbox" name="laboratorio"
+                                                id="lab{{ local.pk }}" {% if local.laboratorio %}checked{% endif %}>
+
+                                            <label class="form-check-label" for="lab{{ local.pk }}">
+                                                Laboratório
+                                            </label>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
+
+                                <button type="submit" class="btn btn-primary">
+                                    Salvar Alterações
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+            {% endfor %}
 
             <!-- PAGINAÇÃO -->
             {% if page_obj %}
@@ -168,8 +284,7 @@
                         </li>
 
                         <li class="page-item">
-                            <a class="page-link"
-                               href="?q={{ termo }}&page={{ page_obj.previous_page_number }}">
+                            <a class="page-link" href="?q={{ termo }}&page={{ page_obj.previous_page_number }}">
                                 Anterior
                             </a>
                         </li>
@@ -177,15 +292,13 @@
 
                         {% if page_obj.has_next %}
                         <li class="page-item">
-                            <a class="page-link"
-                               href="?q={{ termo }}&page={{ page_obj.next_page_number }}">
+                            <a class="page-link" href="?q={{ termo }}&page={{ page_obj.next_page_number }}">
                                 Próxima
                             </a>
                         </li>
 
                         <li class="page-item">
-                            <a class="page-link"
-                               href="?q={{ termo }}&page={{ page_obj.paginator.num_pages }}">
+                            <a class="page-link" href="?q={{ termo }}&page={{ page_obj.paginator.num_pages }}">
                                 Última
                             </a>
                         </li>

@@ -80,16 +80,23 @@
           <span class="nav-text">Categorias</span>
         </a>
 
-        <a class="nav-link {% if request.resolver_match.url_name == 'meus-pedidos-de-busca' %}active{% endif %}"
-          href="{% url 'meus-pedidos-de-busca' %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'listar-atividades' %}active{% endif %}"
+          href="{% url 'listar-atividades' %}">
           <span class="nav-icon"><i class="bi bi-card-list"></i></span>
           <span class="nav-text">Atividades</span>
         </a>
 
         <a class="nav-link {% if request.resolver_match.url_name == 'meu-perfil' %}active{% endif %}"
           href="{% url 'meu-perfil' %}">
-          <span class="nav-icon"><i class="bi bi-gear"></i></span>
-          <span class="nav-text">Configurações</span>
+          <span class="nav-icon"><i class="bi bi-person-gear"></i></span>
+          <span class="nav-text">Meu Perfil</span>
+        </a>
+
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'alterar_senha' %}active{% endif %}"
+          href="{% url 'alterar_senha' %}">
+          <span class="nav-icon text-danger"><i class="bi bi-shield-lock"></i></span>
+          <span class="nav-text">Alterar Senha</span>
         </a>
 
       </nav>
@@ -168,7 +175,7 @@
                 <span class="profile-name d-none d-sm-inline">{{ request.user.primeiro_nome }}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'meu-perfil' %}">Perfil</a></li>
                 <li><a class="dropdown-item" href="#">Configurações</a></li>
                 <li>
                   <hr class="dropdown-divider">
@@ -216,21 +223,18 @@
                   <span class="metric-label">Devolvidos</span>
                   <span class="metric-icon"><i class="bi bi-arrow-up-right-circle"></i></span>
                 </div>
-                <div class="metric-value">48</div>
-                <div class="metric-meta">
-                  <span class="text-success">+12.5%</span>
-                  <span>ao mês anterior</span>
-                </div>
+                <div class="metric-value">{{ qtde_itens_devolvidos }}</div>
+              
               </article>
             </div>
 
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-success">
                 <div class="metric-top">
-                  <span class="metric-label">Buscas Totais</span>
+                  <span class="metric-label">Encontrados</span>
                   <span class="metric-icon"><i class="bi bi-bag-check" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">1.284</div>
+                <div class="metric-value">{{ qtde_itens_encontrados }}</div>
               </article>
             </div>
 

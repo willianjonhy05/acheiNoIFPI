@@ -277,6 +277,7 @@ class Atividade(models.Model):
         ("secondary", "Cinza"),
     ]
 
+    
     titulo = models.CharField("Título", max_length=100)
     descricao = models.CharField("Descrição", max_length=255)
     cor = models.CharField("Cor", max_length=20, choices=CORES, default="primary")

@@ -42,25 +42,31 @@
             </p>
         </div>
 
-        <div class="type-filter" role="group">
+        <form method="GET" id="filtroForm">
 
-            <input type="radio" name="tipo" id="tipoTodos" value="" {% if not tipo_selecionado %}checked{% endif %}>
-            <label for="tipoTodos">
-                <i class="bi bi-grid"></i> Todos
-            </label>
+            <div class="type-filter">
 
-            <input type="radio" name="tipo" id="tipoUsuario" value="1" {% if tipo_selecionado == "1" %}checked{% endif %}>
-            <label for="tipoUsuario">
-                <i class="bi bi-person"></i> Usuários
-            </label>
+                <input type="radio" name="tipo" id="tipoTodos" value="" onchange="this.form.submit()" {% if not
+                    tipo_selecionado %}checked{% endif %}>
+                <label for="tipoTodos">
+                    <i class="bi bi-grid"></i> Todos
+                </label>
 
-            <input type="radio" name="tipo" id="tipoServidor" value="2" {% if tipo_selecionado == "2" %}checked{% endif
-                %}>
-            <label for="tipoServidor">
-                <i class="bi bi-person-badge"></i> Servidores
-            </label>
+                <input type="radio" name="tipo" id="tipoUsuario" value="1" onchange="this.form.submit()" {% if
+                    tipo_selecionado=="1" %}checked{% endif %}>
+                <label for="tipoUsuario">
+                    <i class="bi bi-person"></i> Usuários
+                </label>
 
-        </div>
+                <input type="radio" name="tipo" id="tipoServidor" value="2" onchange="this.form.submit()" {% if
+                    tipo_selecionado=="2" %}checked{% endif %}>
+                <label for="tipoServidor">
+                    <i class="bi bi-person-badge"></i> Servidores
+                </label>
+
+            </div>
+
+        </form>
 
         <div>
             Total:
@@ -260,10 +266,17 @@
 
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-between">
+
+                    <a href="{% url 'itens-por-usuario' usuario.username %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-box-seam"></i>
+                        Ver todos os itens
+                    </a>
+
                     <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         Fechar
                     </button>
+
                 </div>
 
             </div>

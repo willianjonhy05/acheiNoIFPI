@@ -1012,6 +1012,55 @@ def itens_por_categoria(request, slug):
 
     return render(request, "admin/itens_por_categoria.html", context)
 
+@servidor_required
+def itens_por_usuario(request, username):
+
+    usuario = get_object_or_404(Usuario, username=username)
+
+    search = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "").strip()
+    categoria = request.GET.get("categoria", "").strip()
+
+    itens = Item.objects.select_related(
+        "usuario_registro",
+        "categoria",
+        "local"
+    ).filter(
+        usuario_registro=usuario
+    ).order_by("-data_registro")
+
+    # 🔎 BUSCA GLOBAL
+    if search:
+        itens = itens.filter(
+            Q(nome__icontains=search) |
+            Q(codigo__icontains=search) |
+            Q(marca_ou_modelo__icontains=search) |
+            Q(cor__icontains=search) |
+            Q(tamanho__icontains=search)
+        )
+
+    # 📌 STATUS
+    if status in ["1", "2", "3", "4"]:
+        itens = itens.filter(status=int(status))
+
+    # 📁 CATEGORIA
+    if categoria:
+        itens = itens.filter(categoria_id=categoria)
+
+    # 📄 PAGINAÇÃO
+    page_obj = paginar_queryset(request, itens, por_pagina=10)
+
+    context = {
+        "usuario": usuario,
+        "itens": page_obj,
+        "page_obj": page_obj,
+        "search": search,
+        "status_selecionado": status,
+        "categoria_selecionada": categoria,
+        "categorias": Categoria.objects.all(),
+    }
+
+    return render(request, "admin/itens_por_usuario.html", context)
 
 @servidor_required
 def listar_atividades(request):

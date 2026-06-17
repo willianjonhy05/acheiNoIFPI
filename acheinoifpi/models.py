@@ -311,6 +311,7 @@ class Item(models.Model):
     marca_ou_modelo = models.CharField("Marca ou modelo do item", max_length=50, blank=True, null=True)
     nome = models.CharField("Nome do item", max_length=100, blank=True, null=True)
     local = models.ForeignKey(Local, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Local que foi encontrado")
+    local_guardado = models.ForeignKey(Local, on_delete=models.SET_NULL, blank=True, null=True, related_name="itens_guardados", verbose_name="Local guardado" )
     data_registro = models.DateTimeField("Data de registro", auto_now_add=True)
     data_devolucao = models.DateTimeField("Data de devolução", blank=True, null=True)
     data_atualizacao = models.DateTimeField("Data de atualização", auto_now=True)

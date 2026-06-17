@@ -836,6 +836,15 @@ def atualizar_perfil(request):
         if "foto" in request.FILES:
             usuario.foto = request.FILES["foto"]
 
+        # LOCAL SOMENTE PARA SERVIDOR (tipo 1)
+        if str(usuario.tipo) == "1":
+            local_id = request.POST.get("local")
+
+            if local_id:
+                usuario.local_id = local_id
+            else:
+                usuario.local = None
+
         usuario.save()
 
         messages.success(request, "Perfil atualizado com sucesso.")

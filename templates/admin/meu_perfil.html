@@ -122,7 +122,7 @@
     <div class="row g-3">
 
         <!-- TELEFONE -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <label class="form-label">Telefone</label>
             <input class="form-control"
                    name="telefone"
@@ -130,12 +130,30 @@
         </div>
 
         <!-- MATRÍCULA -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <label class="form-label">Matrícula</label>
             <input class="form-control"
                    name="matricula"
                    value="{{ usuario.matricula }}">
         </div>
+
+        
+                {% if usuario.tipo == 2 %}
+                <div class="col-md-12">
+                    <label class="form-label">Local:</label>
+
+                    <select class="form-select" name="local">
+                        <option value="">Selecione o local</option>
+
+                        {% for local in locais %}
+                        <option value="{{ local.id }}"
+                    {% if usuario.local_id and usuario.local_id == local.id %}selected{% endif %}>
+                    {{ local.nome }} - Prédio {{ local.predio }} - Andar {{ local.andar }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
 
         <!-- FOTO -->
         <div class="col-md-12">
@@ -145,12 +163,6 @@
                    type="file"
                    name="foto">
 
-            {% if usuario.foto %}
-                <div class="mt-2">
-                    <img src="{{ usuario.foto.url }}"
-                         style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
-                </div>
-            {% endif %}
         </div>
 
     </div>

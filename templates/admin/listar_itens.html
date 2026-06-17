@@ -144,7 +144,14 @@
 
                             <!-- LOCAL -->
                             <td>
+                                {% if item.status == 2 %}
+                                {{ item.local_guardado|default:"-" }}
+                                {% elif item.status == 1  %}
                                 {{ item.local|default:"-" }}
+                                {% elif item.status == 3  %}
+                                Devolvido
+                                {% else %}
+                                Outro
                             </td>
 
                             <!-- AÇÕES -->

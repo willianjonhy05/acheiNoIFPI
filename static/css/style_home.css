@@ -1,0 +1,203 @@
+/* Variáveis de Cores Institucionais */
+:root {
+    --ifpi-green: #32a041;
+    --ifpi-green-dark: #288034;
+    --ifpi-red: #e31b23;
+    --ifpi-dark: #212529;
+    --ifpi-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ifpi-dark);
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Customização de Cores */
+.bg-red-ifpi { background-color: var(--ifpi-red); }
+.text-green-ifpi { color: var(--ifpi-green); }
+
+/* Hero Section */
+.hero-section {
+    min-height: 85vh;
+    padding: 80px 0;
+}
+
+.logo-hero {
+    max-width: 450px;
+    transition: transform 0.4s ease;
+}
+
+.logo-hero:hover {
+    transform: scale(1.02);
+}
+
+/* Botões Personalizados */
+.btn-ifpi-green {
+    background-color: var(--ifpi-green);
+    color: white;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-ifpi-green:hover {
+    background-color: var(--ifpi-green-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(50, 160, 65, 0.3) !important;
+}
+
+/* Estilo dos Passos */
+.step-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: var(--ifpi-green);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.divider-green {
+    width: 60px;
+    height: 4px;
+    background-color: var(--ifpi-green);
+    border-radius: 2px;
+    margin-top: 15px;
+}
+
+/* Caixa de Informação */
+.info-box {
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid #eee;
+    }
+}
+
+/* Animações Simples */
+.animate-fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 991px) {
+    .hero-section { text-align: center; }
+    .ps-lg-4 { padding-left: 0 !important; margin-top: 2rem; }
+    .logo-hero { max-width: 300px; }
+}/* Variáveis de Cores Institucionais */
+:root {
+    --ifpi-green: #32a041;
+    --ifpi-green-dark: #288034;
+    --ifpi-red: #e31b23;
+    --ifpi-dark: #212529;
+    --ifpi-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ifpi-dark);
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Customização de Cores */
+.bg-red-ifpi { background-color: var(--ifpi-red); }
+.text-green-ifpi { color: var(--ifpi-green); }
+
+/* Hero Section */
+.hero-section {
+    min-height: 85vh;
+    padding: 80px 0;
+}
+
+.logo-hero {
+    max-width: 450px;
+    transition: transform 0.4s ease;
+}
+
+.logo-hero:hover {
+    transform: scale(1.02);
+}
+
+/* Botões Personalizados */
+.btn-ifpi-green {
+    background-color: var(--ifpi-green);
+    color: white;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-ifpi-green:hover {
+    background-color: var(--ifpi-green-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(50, 160, 65, 0.3) !important;
+}
+
+/* Estilo dos Passos */
+.step-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: var(--ifpi-green);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.divider-green {
+    width: 60px;
+    height: 4px;
+    background-color: var(--ifpi-green);
+    border-radius: 2px;
+    margin-top: 15px;
+}
+
+/* Caixa de Informação */
+.info-box {
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+@media (min-width: 768px) {
+    .border-end-md {
+        border-right: 1px solid #eee;
+    }
+}
+
+/* Animações Simples */
+.animate-fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 991px) {
+    .hero-section { text-align: center; }
+    .ps-lg-4 { padding-left: 0 !important; margin-top: 2rem; }
+    .logo-hero { max-width: 300px; }
+}

@@ -118,12 +118,21 @@
     align-items: center;
 }
 
-.login-input-container i {
+/* ícones padrão (cadeado / user) */
+.login-input-container i.fa-user,
+.login-input-container i.fa-lock {
     position: absolute;
     left: 15px;
     color: #9CA3AF;
     font-size: 1rem;
-    transition: color 0.3s ease;
+}
+
+/* input espaçamento */
+.login-input-container input {
+    width: 100%;
+    padding-left: 45px;
+    padding-right: 45px;
+    box-sizing: border-box;
 }
 
 .login-input-container input {
@@ -146,7 +155,7 @@
 
 .login-input-container input:focus + i,
 .login-input-container input:not(:placeholder-shown) + i {
-    color: var(--login-accent);
+    color: #9CA3AF;
 }
 
 /* BOTÃO */
@@ -240,4 +249,40 @@
 .login-form-links a:hover {
     color: var(--login-accent);
     text-decoration: underline;
+}
+
+.login-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* ícone do cadeado */
+.login-input-container .fa-lock {
+    position: absolute;
+    left: 12px;
+    color: #777;
+}
+
+/* input com espaço para ícones */
+.login-input-container input {
+    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: #777;
+    z-index: 2;
+    transition: 0.2s;
+}
+
+.toggle-password:hover {
+    color: #333;
 }

@@ -50,6 +50,8 @@
 
       <nav class="sidebar-nav">
 
+        {% if request.user.tipo == 2 %}
+
         <a class="nav-link {% if request.resolver_match.url_name == 'admin-dashboard' %}active{% endif %}"
           href="{% url 'admin-dashboard' %}">
           <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
@@ -86,37 +88,64 @@
           <span class="nav-text">Atividades</span>
         </a>
 
-        <a class="nav-link {% if request.resolver_match.url_name == 'meu-perfil' %}active{% endif %}"
-          href="{% url 'meu-perfil' %}">
-          <span class="nav-icon"><i class="bi bi-person-gear"></i></span>
-          <span class="nav-text">Meu Perfil</span>
-        </a>
-
-
-        <a class="nav-link {% if request.resolver_match.url_name == 'alterar_senha' %}active{% endif %}"
-          href="{% url 'alterar_senha' %}">
-          <span class="nav-icon text-danger"><i class="bi bi-shield-lock"></i></span>
-          <span class="nav-text">Alterar Senha</span>
-        </a>
-
-      </nav>
-
-      <div class="sidebar-user">
-        {% if request.user.foto %}
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ request.user.foto.url }}"
-          alt="{{ request.user.primeiro_nome }}">
-        {% else %}
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}"
-          alt="{{ request.user.primeiro_nome }}">
         {% endif %}
-        <strong>{{ request.user.primeiro_nome }}</strong>
-        <small>Sistema ativo</small>
-      </div>
 
-      <div class="sidebar-footer">
-        <span class="status-dot"></span>
-        <span class="sidebar-footer-text">Sistema Ativo</span>
-      </div>
+
+        {% if request.user.tipo == 1 %}
+
+        <nav class="sidebar-nav">
+          <a class="nav-link active {% if request.resolver_match.url_name == 'dashboard-aluno' %}active{% endif %}"
+            href="{% url 'dashboard-aluno' %}" aria-current="page">
+            <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+            <span class="nav-text">Painel</span>
+          </a>
+          <a class="nav-link" href="#">
+            <span class="nav-icon"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
+            <span class="nav-text">Meus Pedidos</span>
+          </a>
+          <a class="nav-link" href="#">
+            <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
+            <span class="nav-text">Devolvidos</span>
+          </a>
+
+
+
+          {% endif %}
+
+
+
+
+          <a class="nav-link {% if request.resolver_match.url_name == 'meu-perfil' %}active{% endif %}"
+            href="{% url 'meu-perfil' %}">
+            <span class="nav-icon"><i class="bi bi-person-gear"></i></span>
+            <span class="nav-text">Meu Perfil</span>
+          </a>
+
+
+          <a class="nav-link {% if request.resolver_match.url_name == 'alterar_senha' %}active{% endif %}"
+            href="{% url 'alterar_senha' %}">
+            <span class="nav-icon text-danger"><i class="bi bi-shield-lock"></i></span>
+            <span class="nav-text">Alterar Senha</span>
+          </a>
+
+        </nav>
+
+        <div class="sidebar-user">
+          {% if request.user.foto %}
+          <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ request.user.foto.url }}"
+            alt="{{ request.user.primeiro_nome }}">
+          {% else %}
+          <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'img/perfil.png' %}"
+            alt="{{ request.user.primeiro_nome }}">
+          {% endif %}
+          <strong>{{ request.user.primeiro_nome }}</strong>
+          <small>Sistema ativo</small>
+        </div>
+
+        <div class="sidebar-footer">
+          <span class="status-dot"></span>
+          <span class="sidebar-footer-text">Sistema Ativo</span>
+        </div>
     </aside>
 
     <div class="admin-main">
@@ -139,28 +168,7 @@
               title="Switch color theme">
               <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
             </button>
-            <div class="dropdown">
-              <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                aria-label="Notifications">
-                <span class="notification-dot"></span>
-                <i class="bi bi-bell" aria-hidden="true"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end notification-menu">
-                <div class="dropdown-header fw-bold text-body">Notificações</div>
-                <a class="dropdown-item" href="#">
-                  <span class="notification-title">Novo usuário registrado</span>
-                  <span class="notification-time">4 minutos atrás</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                  <span class="notification-title">Todas os itens entregues</span>
-                  <span class="notification-time">32 minutos atrás</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                  <span class="notification-title">Recorde de devolução semanal</span>
-                  <span class="notification-time">1 hora atrás</span>
-                </a>
-              </div>
-            </div>
+
 
             <div class="dropdown">
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -207,15 +215,12 @@
                   que foram encontrados.{% endblock %}</p>
               </div>
             </div>
-            <div class="heading-actions">{% block heading_actions %}<button class="btn btn-outline-secondary btn-sm"
-                type="button"><i class="bi bi-download" aria-hidden="true"></i> Exportar</button><button
-                class="btn btn-primary btn-sm" type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
-                Criar Relatório</button>{% endblock %}</div>
+            <div class="heading-actions">{% block heading_actions %}{% endblock %}</div>
           </div>
 
           {% block dados %}
 
-
+          {% if request.user.tipo == 2 %}
           <section class="row g-3 mt-1" aria-label="Dashboard metrics">
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-primary">
@@ -224,7 +229,7 @@
                   <span class="metric-icon"><i class="bi bi-arrow-up-right-circle"></i></span>
                 </div>
                 <div class="metric-value">{{ qtde_itens_devolvidos }}</div>
-              
+
               </article>
             </div>
 
@@ -258,6 +263,7 @@
               </article>
             </div>
           </section>
+          {% endif %}
 
           {% endblock %}
 
@@ -266,35 +272,22 @@
 
 
           <section class="row g-3 mt-1">
-            <div class="col-12 col-xl-8">
-              <div class="panel">
-                <div class="panel-header">
-                  <div>
-                    <h2 class="h5 mb-1 section-title"><i class="bi bi-graph-up-arrow"
-                        aria-hidden="true"></i><span>Últimas devoluções mensais</span></h2>
-                    <p class="text-muted mb-0">Desempenho das devoluções ao longo do tempo.</p>
-                  </div>
-                  <a class="btn btn-light btn-sm" href="#">Mais detalhes</a>
-                </div>
 
-                <div class="chart-bars" aria-label="Sales performance chart">
-                  <div class="chart-column bar-42"><span></span><small>Janeiro</small></div>
-                  <div class="chart-column bar-58"><span></span><small>Fevereiro</small></div>
-                  <div class="chart-column bar-51"><span></span><small>Março</small></div>
-                  <div class="chart-column bar-72"><span></span><small>Abril</small></div>
-                  <div class="chart-column bar-66"><span></span><small>Maio</small></div>
-                  <div class="chart-column bar-83"><span></span><small>Junho</small></div>
-                </div>
-              </div>
-            </div>
 
-            <div class="col-12 col-xl-4">
+            {% if request.user.tipo == 2 %}
+
+            <div class="col-12">
               <div class="panel h-100">
                 <div class="panel-header">
                   <div>
-                    <h2 class="h5 mb-1 section-title"><i class="bi bi-activity" aria-hidden="true"></i><span>Últimas
-                        atividades</span></h2>
-                    <p class="text-muted mb-0">Atualizações operacionais recentes.</p>
+                    <h2 class="h5 mb-1 section-title">
+                      <i class="bi bi-activity" aria-hidden="true"></i>
+                      <span>Últimas atividades</span>
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                      Atualizações operacionais recentes.
+                    </p>
                   </div>
                 </div>
 
@@ -337,12 +330,17 @@
                 </div>
               </div>
             </div>
+
+            {% endif %}
           </section>
 
           {% endblock %}
 
 
           {% block tabelas %}
+
+
+          {% if request.user.tipo == 2 %}
 
           <section class="panel mt-3">
             <div class="panel-header">
@@ -384,7 +382,8 @@
                     <td>{{ usuario.get_tipo_display }}</td>
                     <td><span class="badge text-bg-success">{{usuario.ativo}}</span></td>
                     <td>{{ usuario.criado_em|date:"d/m/Y" }}</td>
-                    <td class="text-end"><a class="btn btn-light btn-sm" href="#">Ver</a></td>
+                    <td class="text-end"><a class="btn btn-light btn-sm" target="_blank"
+                        href="{% url 'itens-por-usuario' usuario.username %}">Ver</a></td>
                   </tr>
                   {% endfor %}
 
@@ -394,6 +393,10 @@
               </table>
             </div>
           </section>
+
+          {% endif %}
+
+
 
           {% endblock %}
 

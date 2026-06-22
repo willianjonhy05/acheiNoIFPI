@@ -1,4 +1,4 @@
-{% extends 'admin/dashboard_aluno.html' %}
+{% extends 'admin/dashboard.html' %}
 {% load static %}
 
 {% block title %}Meus Pedidos de Busca{% endblock %}
@@ -24,15 +24,42 @@
 
 {% block conteudo %}
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mb-3">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-
 <div class="panel">
+
+
+    <form method="GET" class="row g-2 mb-3">
+
+
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">Todos status</option>
+            <option value="1" {% if status_selecionado == "1" %}selected{% endif %}>Perdido</option>
+            <option value="2" {% if status_selecionado == "2" %}selected{% endif %}>Encontrado</option>
+            <option value="3" {% if status_selecionado == "3" %}selected{% endif %}>Devolvido</option>
+            <option value="4" {% if status_selecionado == "4" %}selected{% endif %}>Outro</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select name="categoria" class="form-select">
+            <option value="">Todas categorias</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}"
+                        {% if categoria_selecionada == cat.id|stringformat:"s" %}selected{% endif %}>
+                    {{ cat.nome }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">
+            Filtrar
+        </button>
+    </div>
+
+</form>
+
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead>
@@ -40,20 +67,22 @@
                     <th>Foto</th>
                     <th>Objeto</th>
                     <th>Categoria</th>
-                    <th>Tamanho</th>
-                    <th>Cor</th>
                     <th>Local</th>
                     <th>Status</th>
                     <th>Data</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
 
             <tbody>
-                {% for item in pedidos %}
+                {% for item in itens %}
                     <tr>
                         <td>
                             {% if item.foto %}
-                                <img src="{{ item.foto.url }}" alt="{{ item.nome }}" width="56" height="56"
+                                <img src="{{ item.foto.url }}" 
+                                     alt="{{ item.nome }}" 
+                                     width="56" 
+                                     height="56"
                                      style="object-fit: cover; border-radius: 8px;">
                             {% else %}
                                 <span class="text-muted">Sem foto</span>
@@ -62,6 +91,7 @@
 
                         <td>
                             <strong>{{ item.nome }}</strong>
+
                             {% if item.descricao %}
                                 <div class="text-muted small">
                                     {{ item.descricao|truncatechars:60 }}
@@ -70,8 +100,6 @@
                         </td>
 
                         <td>{{ item.categoria.nome|default:"-" }}</td>
-                        <td>{{ item.tamanho|default:"-" }}</td>
-                        <td>{{ item.cor|default:"-" }}</td>
                         <td>{{ item.local.nome|default:"-" }}</td>
 
                         <td>
@@ -79,6 +107,10 @@
                                 <span class="badge bg-warning text-dark">Perdido</span>
                             {% elif item.status == 2 %}
                                 <span class="badge bg-success">Encontrado</span>
+                            {% elif item.status == 3 %}
+                                <span class="badge bg-primary">Devolvido</span>
+                            {% elif item.status == 4 %}
+                                <span class="badge bg-secondary">Outro</span>
                             {% else %}
                                 <span class="badge bg-secondary">Indefinido</span>
                             {% endif %}
@@ -91,10 +123,19 @@
                                 -
                             {% endif %}
                         </td>
+
+                        <td>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDetalhesItem{{ item.id }}">
+                                Ver detalhes
+                            </button>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-4">
+                        <td colspan="9" class="text-center text-muted py-4">
                             Você ainda não cadastrou nenhum pedido de busca.
                         </td>
                     </tr>
@@ -102,8 +143,176 @@
             </tbody>
         </table>
     </div>
+
 </div>
 
-{% endblock %}
 
+{% for item in itens %}
+<div class="modal fade" 
+     id="modalDetalhesItem{{ item.id }}" 
+     tabindex="-1" 
+     aria-labelledby="modalDetalhesItemLabel{{ item.id }}" 
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalhesItemLabel{{ item.id }}">
+                    Detalhes do pedido de busca
+                </h5>
+
+                <button type="button" 
+                        class="btn-close" 
+                        data-bs-dismiss="modal" 
+                        aria-label="Fechar">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-4">
+
+                    <div class="col-md-4 text-center">
+                        {% if item.foto %}
+                            <img src="{{ item.foto.url }}" 
+                                 alt="{{ item.nome }}" 
+                                 class="img-fluid rounded shadow-sm"
+                                 style="max-height: 260px; object-fit: cover;">
+                        {% else %}
+                            <div class="border rounded p-4 text-muted">
+                                Sem foto cadastrada
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <h4 class="mb-2">{{ item.nome }}</h4>
+
+                        <div class="mb-3">
+                            {% if item.status == 1 %}
+                                <span class="badge bg-warning text-dark">Perdido</span>
+                            {% elif item.status == 2 %}
+                                <span class="badge bg-success">Encontrado</span>
+                            {% elif item.status == 3 %}
+                                <span class="badge bg-primary">Devolvido</span>
+                            {% elif item.status == 4 %}
+                                <span class="badge bg-secondary">Outro</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Indefinido</span>
+                            {% endif %}
+                        </div>
+
+                        <dl class="row mb-0">
+
+                            <dt class="col-sm-4">Código</dt>
+                            <dd class="col-sm-8">{{ item.codigo|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Objeto</dt>
+                            <dd class="col-sm-8">{{ item.nome|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Marca/Modelo</dt>
+                            <dd class="col-sm-8">{{ item.marca_ou_modelo|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Categoria</dt>
+                            <dd class="col-sm-8">{{ item.categoria.nome|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Tamanho</dt>
+                            <dd class="col-sm-8">{{ item.tamanho|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Cor</dt>
+                            <dd class="col-sm-8">{{ item.cor|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Local</dt>
+                            <dd class="col-sm-8">{{ item.local.nome|default:"-" }}</dd>
+
+                            <dt class="col-sm-4">Data de registro</dt>
+                            <dd class="col-sm-8">
+                                {% if item.data_registro %}
+                                    {{ item.data_registro|date:"d/m/Y H:i" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-4">Descrição</dt>
+                            <dd class="col-sm-8">
+                                {% if item.descricao %}
+                                    {{ item.descricao }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </dd>
+
+                        </dl>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" 
+                        class="btn btn-secondary" 
+                        data-bs-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- PAGINAÇÃO -->
+            {% if page_obj %}
+            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                <div class="text-muted small">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                </div>
+
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&q={{ search }}&status={{ status_selecionado }}&categoria={{ categoria_selecionada }}">
+                                Primeira
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ search }}&status={{ status_selecionado }}&categoria={{ categoria_selecionada }}">
+                                Anterior
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ search }}&status={{ status_selecionado }}&categoria={{ categoria_selecionada }}">
+                                Próxima
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&q={{ search }}&status={{ status_selecionado }}&categoria={{ categoria_selecionada }}">
+                                Última
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </nav>
+
+            </div>
+            {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}
 {% block scripts %}{% endblock %}

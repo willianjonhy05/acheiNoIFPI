@@ -789,32 +789,81 @@ def cadastrar_pedido_de_busca(request):
 
 @usuario_required
 def meus_pedidos_de_busca(request):
-    pedidos = Item.objects.filter(
+    search = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "").strip()
+    categoria = request.GET.get("categoria", "").strip()
+    
+    itens = Item.objects.filter(
         dono=request.user
     ).order_by("-data_registro")
+    
+    if search:
+        itens = itens.filter(
+            Q(nome__icontains=search) |
+            Q(codigo__icontains=search) |
+            Q(marca_ou_modelo__icontains=search) |
+            Q(cor__icontains=search) |
+            Q(tamanho__icontains=search)
+        )    
+    
+    if status in ["1", "2", "3", "4"]:
+        itens = itens.filter(status=int(status))
 
-    return render(request, "usuarios/meus_pedidos_de_busca.html", {
-        "pedidos": pedidos
-    })
+    if categoria:
+        itens = itens.filter(categoria_id=categoria)
 
-
-@servidor_required
-def dashboard(request):
-    qtde_usuarios = Usuario.objects.count()
-    qtde_itens_encontrados = Item.objects.filter(status=2).count()
-    qtde_itens_devolvidos = Item.objects.filter(status=3).count()
-    usuarios = Usuario.objects.all()[:5]  
-    atividades = Atividade.objects.all()[:3]
+    page_obj = paginar_queryset(request, itens, por_pagina=10)   
     
     context = {
-        "qtde_usuarios": qtde_usuarios,
-        "qtde_itens_encontrados": qtde_itens_encontrados,
-        "qtde_itens_devolvidos": qtde_itens_devolvidos,
-        "usuarios": usuarios,
-        "atividades": atividades
+        "itens": page_obj,
+        "page_obj": page_obj,
+        "search": search,
+        "status_selecionado": status,
+        "categoria_selecionada": categoria,
+        "categorias": Categoria.objects.all(),
+    } 
+
+    return render(request, "usuarios/meus_pedidos_de_busca.html", context)
+
+
+@login_required
+def dashboard(request):
+    usuario = request.user
+
+    context = {
+        "usuario": usuario,
+        "tipo_usuario": usuario.tipo,
     }
-    
-    return render(request, 'admin/dashboard.html', context)
+
+    if usuario.tipo == 2:
+        context.update({
+            "qtde_usuarios": Usuario.objects.count(),
+            "qtde_itens_encontrados": Item.objects.filter(status=2).count(),
+            "qtde_itens_devolvidos": Item.objects.filter(status=3).count(),
+            "usuarios": Usuario.objects.order_by("-id")[:5],
+            "atividades": Atividade.objects.order_by("-id")[:3],
+        })
+
+    elif usuario.tipo == 1:
+        itens_totais = Item.objects.filter(usuario_registro=usuario)
+        itens_encontrados_usuario = Item.objects.filter(usuario_registro=usuario, status=2)
+        itens_devolvidos_usuario = Item.objects.filter(usuario_registro=usuario, status=3)
+        itens_perdidos_usuario = Item.objects.filter(usuario_registro=usuario, status=1)
+        context.update({
+            "qtde_itens_totais": itens_totais.count(),
+            "qtde_itens_encontrados_usuario": itens_encontrados_usuario.count(),
+            "qtde_itens_devolvidos_usuario": itens_devolvidos_usuario.count(),
+            "qtde_itens_perdidos_usuario": itens_perdidos_usuario.count(),
+            "itens_totais": itens_totais,
+            "itens_encontrados_usuario": itens_encontrados_usuario,
+            "itens_devolvidos_usuario": itens_devolvidos_usuario,
+            "itens_perdidos_usuario": itens_perdidos_usuario,
+            
+           
+        })
+
+    return render(request, "admin/dashboard.html", context)
+
 
 
 @login_required
